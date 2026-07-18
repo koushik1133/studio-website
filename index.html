@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio Website | Premium Software Solutions</title>
+  <meta name="description" content="From enterprise SaaS applications to academic research and mini/major student projects, Studio Website builds digital products that solve real-world problems.">
+  
+  <!-- FOUC prevention script & Color scheme meta -->
+  <meta name="color-scheme" content="light dark">
+  <script>
+    {
+      const colorScheme = localStorage.getItem("color-scheme");
+      if (colorScheme) {
+        document.querySelector('meta[name="color-scheme"]').content = colorScheme;
+        document.documentElement.className = colorScheme === 'dark' ? 'theme-dark' : 'theme-light';
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter (Body & Headings), JetBrains Mono (Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Background Canvas for Particles -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="#" class="logo-link">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">STUDIO<span class="highlight">WEBSITE</span></span>
+      </a>
+      
+      <nav class="main-nav" id="main-nav">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#skills">Tech</a></li>
+          <li><a href="#portfolio">Work</a></li>
+          <li><a href="#templates">Templates</a></li>
+          <li><a href="#student-portal" class="student-link">Student Portal</a></li>
+          <li><a href="#estimator">Estimator</a></li>
+          <li><a href="#dashboard">Live Status</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle-btn" class="icon-btn" aria-label="Toggle dark/light theme" title="Toggle theme">
+          <i data-lucide="moon" class="dark-icon"></i>
+          <i data-lucide="sun" class="light-icon"></i>
+        </button>
+        
+        <a href="#contact" class="btn btn-primary nav-cta">Start Project</a>
+        
+        <button class="menu-toggle-btn icon-btn" id="menu-toggle-btn" aria-label="Toggle navigation menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Consult CTA -->
+  <div class="sticky-cta-container">
+    <a href="#contact" class="sticky-cta" aria-label="Book a consultation">
+      <i data-lucide="phone-call"></i>
+      <span>Free Scoping Call</span>
+    </a>
+  </div>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-container">
+        <div class="badge hero-badge">Batch 2020 – 2028 Collaborative</div>
+        <h1 class="hero-title">Building Software That Creates <span class="gradient-text">Impact</span></h1>
+        <p class="hero-subtitle">From university research papers to robust enterprise portals—we engineer premium digital systems designed for speed, clarity, and scalability.</p>
+        
+        <div class="hero-ctas">
+          <a href="#contact" class="btn btn-primary btn-large">
+            <span>Start Your Project</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+          <a href="#portfolio" class="btn btn-secondary btn-large">View Our Work</a>
+        </div>
+
+        <div class="hero-tags">
+          <span>⚡ Apple-Inspired UI</span>
+          <span>⚡ 8px Grid Spacing</span>
+          <span>⚡ No Flashy Gimmicks</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATISTICS SECTION -->
+    <section class="stats-section" id="stats">
+      <div class="container stats-grid">
+        <div class="stat-card">
+          <div class="stat-num" data-target="142">0</div>
+          <div class="stat-label">Projects Delivered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="12">0</div>
+          <div class="stat-label">Projects Running</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="86">0</div>
+          <div class="stat-label">Students Helped</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="99">0</div>
+          <span class="stat-suffix">%</span>
+          <div class="stat-label">Satisfaction Rate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTNERS SECTION -->
+    <section class="partners-section">
+      <div class="container">
+        <span class="partners-label">Trust Collaborators</span>
+        <div class="marquee-container">
+          <div class="marquee-content">
+            <span class="marquee-item">AWS</span>
+            <span class="marquee-item">VERCEL</span>
+            <span class="marquee-item">DOCKER</span>
+            <span class="marquee-item">GITHUB</span>
+            <span class="marquee-item">CLOUDFLARE</span>
+            <span class="marquee-item">JNTU</span>
+            <span class="marquee-item">VNR VJIET</span>
+            <span class="marquee-item">IEEE STUDENT BRANCH</span>
+            <span class="marquee-item">GOOGLE FOR STARTUPS</span>
+            <!-- Duplicate for infinite scrolling -->
+            <span class="marquee-item">AWS</span>
+            <span class="marquee-item">VERCEL</span>
+            <span class="marquee-item">DOCKER</span>
+            <span class="marquee-item">GITHUB</span>
+            <span class="marquee-item">CLOUDFLARE</span>
+            <span class="marquee-item">JNTU</span>
+            <span class="marquee-item">VNR VJIET</span>
+            <span class="marquee-item">IEEE STUDENT BRANCH</span>
+            <span class="marquee-item">GOOGLE FOR STARTUPS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section" id="about">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">About Studio</span>
+          <h2>A Collaborative Force of Technical Excellence</h2>
+        </div>
+        
+        <div class="about-grid">
+          <div class="about-content">
+            <p class="lead-text">We are a decentralized, highly collaborative software design and engineering collective consisting of experienced developers, designers, and technical experts representing graduating batches from <strong>2020 through 2028</strong>.</p>
+            <p>Our collaborative setup crosses multiple engineering universities, research labs, and tech hubs. By merging the seasoned engineering standards of our senior graduates working in the industry with the vibrant, cutting-edge technical capabilities of outstanding junior researchers, we construct highly polished projects that scale seamlessly.</p>
+            
+            <div class="highlights-grid">
+              <div class="highlight-item">
+                <i data-lucide="check-circle-2"></i>
+                <div>
+                  <strong>Academic Alignment</strong>
+                  <p>IEEE, Mini, Major, and custom research projects built with rigorous documentation.</p>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i data-lucide="shield-check"></i>
+                <div>
+                  <strong>Commercial Rigor</strong>
+                  <p>Production SaaS, CRM, admin panels, and e-commerce templates built to enterprise standards.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="about-visual">
+            <div class="glass-card journey-card">
+              <h3 class="journey-title">Engineered Collaborations</h3>
+              <div class="timeline-visual">
+                <div class="timeline-node active">
+                  <div class="node-year">2020-2023</div>
+                  <div class="node-desc">Core SaaS, ERP & Blockchain Deployments</div>
+                </div>
+                <div class="timeline-node active">
+                  <div class="node-year">2024-2025</div>
+                  <div class="node-desc">Advanced ML/AI & Web3 Systems Integration</div>
+                </div>
+                <div class="timeline-node active">
+                  <div class="node-year">2026-2028</div>
+                  <div class="node-desc">Next-Gen Agents, LLMs & High-Speed Frameworks</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES (WHAT WE DO) SECTION -->
+    <section class="services-section" id="services">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">What We Do</span>
+          <h2>Our Core Capabilities</h2>
+          <p class="section-desc">From clean static portfolios to deep ML systems, we provide target-specific architectures.</p>
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon"><i data-lucide="laptop"></i></div>
+            <h3>Web Development</h3>
+            <p>High-performance Next.js and Vite applications, sleek landing pages, and responsive corporate web portals.</p>
+            <a href="#contact" class="service-link"><span>Inquire Details</span> <i data-lucide="arrow-right"></i></a>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon"><i data-lucide="smartphone"></i></div>
+            <h3>Mobile Apps</h3>
+            <p>Cross-platform mobile applications using Flutter and React Native with native efficiency.</p>
+            <a href="#contact" class="service-link"><span>Inquire Details</span> <i data-lucide="arrow-right"></i></a>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon"><i data-lucide="brain-circuit"></i></div>
+            <h3>AI & ML Solutions</h3>
+            <p>Custom LLM integration, automated agent workflows, PyTorch/TensorFlow models, and predictive analytics.</p>
+            <a href="#contact" class="service-link"><span>Inquire Details</span> <i data-lucide="arrow-right"></i></a>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon"><i data-lucide="graduation-cap"></i></div>
+            <h3>Student Projects</h3>
+            <p>Comprehensive major/mini projects matching university regulations (IEEE, research publications, full project reports).</p>
+            <a href="#student-portal" class="service-link"><span>Configure Portal</span> <i data-lucide="arrow-right"></i></a>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon"><i data-lucide="database"></i></div>
+            <h3>SaaS & Admin Panels</h3>
+            <p>Sleek dashboard configurations, custom database integrations, CRM configurations, and secure API networks.</p>
+            <a href="#contact" class="service-link"><span>Inquire Details</span> <i data-lucide="arrow-right"></i></a>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon"><i data-lucide="sparkles"></i></div>
+            <h3>UX/UI & Brand Design</h3>
+            <p>Premium Apple-inspired prototyping in Figma, comprehensive user testing, vector assets, and design handoffs.</p>
+            <a href="#contact" class="service-link"><span>Inquire Details</span> <i data-lucide="arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECHNICAL CAPABILITIES SHOWCASE -->
+    <section class="capabilities-section" id="skills">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Tech Stack</span>
+          <h2>Interactive Technology Showcase</h2>
+          <p class="section-desc">Click/hover on categories to explore our experience scores and typical deployment configs.</p>
+        </div>
+
+        <div class="capabilities-container">
+          <div class="caps-sidebar">
+            <button class="cap-tab-btn active" data-category="frontend">Frontend</button>
+            <button class="cap-tab-btn" data-category="backend">Backend</button>
+            <button class="cap-tab-btn" data-category="database">Database & Cache</button>
+            <button class="cap-tab-btn" data-category="cloud">Cloud & DevOps</button>
+            <button class="cap-tab-btn" data-category="ai">AI / ML / Web3</button>
+          </div>
+
+          <div class="caps-content">
+            <!-- Frontend Category -->
+            <div class="cap-panel active" id="cap-frontend">
+              <div class="tech-grid">
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">React / Next.js</span>
+                    <span class="tech-level">Expert (95%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 95%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Vue / Nuxt</span>
+                    <span class="tech-level">Advanced (85%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 85%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Vanilla CSS / HSL layouts</span>
+                    <span class="tech-level">Master (98%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 98%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">TypeScript</span>
+                    <span class="tech-level">Expert (92%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 92%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Backend Category -->
+            <div class="cap-panel" id="cap-backend">
+              <div class="tech-grid">
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Node.js (Express/NestJS)</span>
+                    <span class="tech-level">Expert (90%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 90%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Python (Django/FastAPI)</span>
+                    <span class="tech-level">Expert (92%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 92%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Java (Spring Boot)</span>
+                    <span class="tech-level">Advanced (80%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 80%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">PHP (Laravel)</span>
+                    <span class="tech-level">Intermediate (75%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 75%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Database Category -->
+            <div class="cap-panel" id="cap-database">
+              <div class="tech-grid">
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">PostgreSQL</span>
+                    <span class="tech-level">Expert (90%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 90%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">MongoDB</span>
+                    <span class="tech-level">Advanced (88%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 88%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">MySQL</span>
+                    <span class="tech-level">Advanced (85%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 85%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Firebase (Realtime/Firestore)</span>
+                    <span class="tech-level">Expert (94%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 94%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cloud Category -->
+            <div class="cap-panel" id="cap-cloud">
+              <div class="tech-grid">
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">AWS</span>
+                    <span class="tech-level">Advanced (84%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 84%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Docker & K8s</span>
+                    <span class="tech-level">Advanced (80%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 80%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Vercel / Netlify / Cloudflare</span>
+                    <span class="tech-level">Expert (96%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 96%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Google Cloud (GCP)</span>
+                    <span class="tech-level">Advanced (82%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 82%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Category -->
+            <div class="cap-panel" id="cap-ai">
+              <div class="tech-grid">
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">OpenAI API / Gemini API</span>
+                    <span class="tech-level">Expert (95%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 95%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">LangChain / Agent Orchestrators</span>
+                    <span class="tech-level">Advanced (88%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 88%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">PyTorch / TensorFlow</span>
+                    <span class="tech-level">Intermediate (74%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 74%"></div></div>
+                </div>
+                <div class="tech-item">
+                  <div class="tech-info">
+                    <span class="tech-name">Solidity / Ethereum Smart Contracts</span>
+                    <span class="tech-level">Advanced (80%)</span>
+                  </div>
+                  <div class="tech-bar"><div class="tech-progress" style="width: 80%"></div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE PROJECT DASHBOARD -->
+    <section class="dashboard-section" id="dashboard">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Live System Status</span>
+          <h2>Active Build Monitoring</h2>
+          <p class="section-desc">Watch our current integration pipeline and compilation logs ticking in real time.</p>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Live Pipeline Ticker -->
+          <div class="glass-card monitor-card">
+            <div class="monitor-header">
+              <div class="dot red-pulse"></div>
+              <span>Deployment & IEEE Validation Logs</span>
+            </div>
+            <div class="console-body" id="console-logs">
+              <div class="log-line text-muted">[2026-07-17T13:28:00] Initializing Intake monitor...</div>
+              <div class="log-line">[OK] Subsystems online. Listening for webhooks.</div>
+              <div class="log-line text-blue">[COMPILE] Assembling Next.js CRM Dashboard...</div>
+              <div class="log-line text-green">[SUCCESS] Build deployed to staging. CDN updated.</div>
+            </div>
+          </div>
+
+          <!-- Dynamic SVG Chart & Stats -->
+          <div class="glass-card stats-widget-card">
+            <h3>Active Project Distribution</h3>
+            <div class="chart-container">
+              <!-- SVG Bar Chart -->
+              <svg class="svg-bar-chart" viewBox="0 0 400 200">
+                <g class="grid-lines">
+                  <line x1="40" y1="20" x2="380" y2="20" stroke="rgba(255,255,255,0.05)" />
+                  <line x1="40" y1="65" x2="380" y2="65" stroke="rgba(255,255,255,0.05)" />
+                  <line x1="40" y1="110" x2="380" y2="110" stroke="rgba(255,255,255,0.05)" />
+                  <line x1="40" y1="155" x2="380" y2="155" stroke="rgba(255,255,255,0.05)" />
+                </g>
+                <g class="bars">
+                  <!-- Planning (3 projects) -->
+                  <rect class="chart-bar" x="70" y="125" width="30" height="30" rx="3" fill="var(--text-dim)" />
+                  <!-- Development (6 projects) -->
+                  <rect class="chart-bar" x="150" y="80" width="30" height="75" rx="3" fill="var(--color-primary)" />
+                  <!-- Testing (2 projects) -->
+                  <rect class="chart-bar" x="230" y="135" width="30" height="20" rx="3" fill="var(--color-accent-purple)" />
+                  <!-- Deployment (1 project) -->
+                  <rect class="chart-bar" x="310" y="145" width="30" height="10" rx="3" fill="var(--color-success)" />
+                </g>
+                <g class="x-axis-labels" font-size="10" fill="var(--text-dim)" text-anchor="middle">
+                  <text x="85" y="175">Planning</text>
+                  <text x="165" y="175">Coding</text>
+                  <text x="245" y="175">QA/Testing</text>
+                  <text x="325" y="175">Deploying</text>
+                </g>
+              </svg>
+            </div>
+            
+            <div class="dash-stats">
+              <div class="dash-stat">
+                <span class="num">3</span>
+                <span class="lbl">Planning</span>
+              </div>
+              <div class="dash-stat">
+                <span class="num highlight-blue">6</span>
+                <span class="lbl">Coding</span>
+              </div>
+              <div class="dash-stat">
+                <span class="num highlight-purple">2</span>
+                <span class="lbl">QA/Testing</span>
+              </div>
+              <div class="dash-stat">
+                <span class="num highlight-green">1</span>
+                <span class="lbl">Deploying</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY CHOOSE US & QUALITY COMMITMENTS SECTION -->
+    <section class="why-choose-us-section" id="why-choose-us">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Why Choose Us</span>
+          <h2>Technical Standards & Commitments</h2>
+        </div>
+        <div class="why-grid">
+          <div class="glass-card why-card">
+            <i data-lucide="shield-check"></i>
+            <h3>Security-First Development</h3>
+            <p>Every line of code undergoes strict vulnerability scans. Custom routing systems, sanitized databases, and multi-factor authentication are standard.</p>
+          </div>
+          <div class="glass-card why-card">
+            <i data-lucide="zap"></i>
+            <h3>On-Time Delivery & Support</h3>
+            <p>We work in parallel batches. Our sprint-based engineering lifecycle guarantees your project is delivered on schedule, with post-launch technical support.</p>
+          </div>
+          <div class="glass-card why-card">
+            <i data-lucide="cpu"></i>
+            <h3>Experienced Team (2020–2028)</h3>
+            <p>Our collaborative force merges senior graduates from industry giants with cutting-edge academic researchers across top universities.</p>
+          </div>
+          <div class="glass-card why-card">
+            <i data-lucide="gauge"></i>
+            <h3>Lighthouse-Optimal Speed</h3>
+            <p>We build production-ready applications with zero bloated packages. Every layout is highly optimized for swift load times and SEO indexing.</p>
+          </div>
+          <div class="glass-card why-card">
+            <i data-lucide="accessibility"></i>
+            <h3>Inclusive Accessibility</h3>
+            <p>Strict WCAG 2.1 compliance. Responsive, semantic markup ensures compatibility across screen readers and alternative input devices.</p>
+          </div>
+          <div class="glass-card why-card">
+            <i data-lucide="coins"></i>
+            <h3>Affordable Academic Terms</h3>
+            <p>We construct complex IEEE, mini, and major projects with complete documentation and viva mentorship at accessible, fair rates.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO WORK SECTION -->
+    <section class="portfolio-section" id="portfolio">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Portfolio</span>
+          <h2>Projects We Engineered</h2>
+          
+          <div class="portfolio-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="commercial">Commercial</button>
+            <button class="filter-btn" data-filter="student">Student</button>
+            <button class="filter-btn" data-filter="ai">AI / ML</button>
+            <button class="filter-btn" data-filter="blockchain">Blockchain</button>
+          </div>
+        </div>
+
+        <div class="portfolio-grid" id="portfolio-grid">
+          <!-- Project 1 -->
+          <div class="portfolio-card" data-category="commercial ai">
+            <div class="card-image-wrapper">
+              <img src="images/saas_dashboard.jpg" alt="Commercial SaaS Platform" loading="lazy">
+              <span class="card-badge">Commercial</span>
+            </div>
+            <div class="card-info">
+              <h3>Nexus CRM Dashboard</h3>
+              <p>A multi-tenant analytical dashboard containing modern graphs, predictive churn analytics with local AI, and custom role permissions.</p>
+              <div class="card-techs">
+                <span>React</span>
+                <span>FastAPI</span>
+                <span>PostgreSQL</span>
+                <span>LangChain</span>
+              </div>
+              <div class="card-links">
+                <a href="#contact" class="btn btn-small btn-secondary">Request Blueprint</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="portfolio-card" data-category="student blockchain">
+            <div class="card-image-wrapper">
+              <div class="fallback-card-img" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                <i data-lucide="graduation-cap" class="huge-icon"></i>
+              </div>
+              <span class="card-badge">Student Project</span>
+            </div>
+            <div class="card-info">
+              <h3>Secure Decentralized Academic Verifier</h3>
+              <p>An IEEE-compliant document authentication network using cryptographic smart contracts to authenticate certificates.</p>
+              <div class="card-techs">
+                <span>Solidity</span>
+                <span>Ethereum</span>
+                <span>IPFS</span>
+                <span>React</span>
+              </div>
+              <div class="card-links">
+                <a href="#student-portal" class="btn btn-small btn-secondary configure-similar-btn" data-project-title="Secure Decentralized Academic Verifier" data-project-domain="Blockchain">Configure Similar</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="portfolio-card" data-category="student ai">
+            <div class="card-image-wrapper">
+              <div class="fallback-card-img" style="background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);">
+                <i data-lucide="brain" class="huge-icon"></i>
+              </div>
+              <span class="card-badge">Research Project</span>
+            </div>
+            <div class="card-info">
+              <h3>Brain Tumor Segmentation via U-Net</h3>
+              <p>A final year project demonstrating segmentation of glioblastoma scans using custom convolutional pipelines and visual heatmaps.</p>
+              <div class="card-techs">
+                <span>Python</span>
+                <span>PyTorch</span>
+                <span>Streamlit</span>
+                <span>Docker</span>
+              </div>
+              <div class="card-links">
+                <a href="#student-portal" class="btn btn-small btn-secondary configure-similar-btn" data-project-title="Brain Tumor Segmentation via U-Net" data-project-domain="AI Solutions">Request Code & Report</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEMPLATES SECTION -->
+    <section class="templates-section" id="templates">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Ready-Made Blueprints</span>
+          <h2>Instant Production Templates</h2>
+          <p class="section-desc">Choose a design, request customization, and deploy on your own domain in under 48 hours.</p>
+        </div>
+
+        <div class="templates-grid">
+          <!-- Template 1 -->
+          <div class="template-card">
+            <div class="temp-image">
+              <img src="images/gym_template.jpg" alt="Velocity Fit Gym Template" loading="lazy">
+              <span class="temp-category">Fitness</span>
+            </div>
+            <div class="temp-body">
+              <h3>Velocity Fit</h3>
+              <p>A dynamic, dark-mode fitness landing page. Highlights custom schedules, trainers list, and booking logic.</p>
+              <div class="temp-features">
+                <span>✓ Glassmorphic schedules</span>
+                <span>✓ Fully responsive</span>
+                <span>✓ Admin editing panel</span>
+              </div>
+              <div class="temp-ctas">
+                <button class="btn btn-secondary btn-small open-preview-btn" data-template="gym">Live Preview</button>
+                <button class="btn btn-primary btn-small request-temp-btn" data-template-name="Velocity Fit Gym Template">Request Template</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Template 2 -->
+          <div class="template-card">
+            <div class="temp-image">
+              <img src="images/restaurant_template.jpg" alt="Luna & Laurel Fine Dining Template" loading="lazy">
+              <span class="temp-category">Restaurant</span>
+            </div>
+            <div class="temp-body">
+              <h3>Luna & Laurel</h3>
+              <p>An elegant, light-themed luxury reservation portal. Focuses on premium typography and table booking calendars.</p>
+              <div class="temp-features">
+                <span>✓ Table booking calendar</span>
+                <span>✓ Responsive menu grid</span>
+                <span>✓ High-end animations</span>
+              </div>
+              <div class="temp-ctas">
+                <button class="btn btn-secondary btn-small open-preview-btn" data-template="restaurant">Live Preview</button>
+                <button class="btn btn-primary btn-small request-temp-btn" data-template-name="Luna & Laurel Restaurant Template">Request Template</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INDUSTRIES SERVED SECTION -->
+    <section class="industries-section" id="industries">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Sectors We Empower</span>
+          <h2>Industries Served</h2>
+        </div>
+        <div class="industries-grid">
+          <div class="glass-card industry-card">
+            <i data-lucide="activity"></i>
+            <h4>Healthcare</h4>
+            <p>Clinics, patient record portals, and pharmacy management software built with strict data privacy.</p>
+          </div>
+          <div class="glass-card industry-card">
+            <i data-lucide="graduation-cap"></i>
+            <h4>Education</h4>
+            <p>Learning management systems, online testing, admission consoles, and academic dashboards.</p>
+          </div>
+          <div class="glass-card industry-card">
+            <i data-lucide="shopping-bag"></i>
+            <h4>Retail & E-Commerce</h4>
+            <p>Scalable online stores, custom checkouts, inventory synchronization, and billing integration.</p>
+          </div>
+          <div class="glass-card industry-card">
+            <i data-lucide="heart"></i>
+            <h4>Fitness & Wellness</h4>
+            <p>Gym administration portals, class scheduling maps, and automated member analytics.</p>
+          </div>
+          <div class="glass-card industry-card">
+            <i data-lucide="utensils"></i>
+            <h4>Restaurants</h4>
+            <p>Seasonal tasting menus, online reservation pipelines, and contactless dining platforms.</p>
+          </div>
+          <div class="glass-card industry-card">
+            <i data-lucide="home"></i>
+            <h4>Real Estate</h4>
+            <p>Interactive property listings, virtual map filters, and broker connection forms.</p>
+          </div>
+          <div class="glass-card industry-card">
+            <i data-lucide="rocket"></i>
+            <h4>Startups</h4>
+            <p>MVP development, high-converting landing pages, SaaS platforms, and seed-funding prototypes.</p>
+          </div>
+          <div class="glass-card industry-card">
+            <i data-lucide="globe"></i>
+            <h4>NGOs</h4>
+            <p>Custom fundraising hubs, volunteer registration portals, and community-driven blogs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESTIMATOR SECTION -->
+    <section class="estimator-section" id="estimator">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Interactive Planner</span>
+          <h2>Project Scope & Complexity Estimator</h2>
+          <p class="section-desc">Estimate project metrics. Select layers to estimate complexity and generate roadmap suggestions.</p>
+        </div>
+
+        <div class="estimator-grid glass-card">
+          <div class="estimator-inputs">
+            <div class="input-group">
+              <label for="project-type-est">Project Domain</label>
+              <select id="project-type-est">
+                <option value="web-simple">Simple Landing Page / Template</option>
+                <option value="web-saas">SaaS Dashboard / CRM Portal</option>
+                <option value="student-ieee" selected>IEEE Research / Student Project</option>
+                <option value="ai-agent">Autonomous AI Agent Workflows</option>
+                <option value="blockchain-dapp">Web3 Decentralized App</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label>Extra Architecture Requirements</label>
+              <div class="checkbox-grid">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="est-req-auth" checked>
+                  <span>User Auth & Roles</span>
+                </label>
+                <label class="checkbox-container">
+                  <input type="checkbox" id="est-req-db" checked>
+                  <span>Database Pipeline</span>
+                </label>
+                <label class="checkbox-container">
+                  <input type="checkbox" id="est-req-ai">
+                  <span>Generative LLM Module</span>
+                </label>
+                <label class="checkbox-container">
+                  <input type="checkbox" id="est-req-payments">
+                  <span>Payment Checkout Gateway</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="est-timeline-slider">Target Timeline: <span id="est-timeline-val" class="highlight">6 Weeks</span></label>
+              <input type="range" id="est-timeline-slider" min="2" max="16" value="6" step="1">
+            </div>
+          </div>
+
+          <div class="estimator-outputs">
+            <div class="output-metric">
+              <div class="metric-val" id="est-complexity">Medium</div>
+              <div class="metric-lbl">Complexity Rating</div>
+            </div>
+            
+            <div class="output-specs">
+              <div class="spec-item">
+                <span class="spec-label">Suggested Tech Stack:</span>
+                <span class="spec-value" id="est-suggested-stack">React, Node.js, PostgreSQL</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Development Phases:</span>
+                <span class="spec-value" id="est-phases">4 Core Cycles</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Collaborative Engineers:</span>
+                <span class="spec-value" id="est-engineers">2 Developers + 1 QA</span>
+              </div>
+            </div>
+
+            <a href="#contact" class="btn btn-primary btn-full" id="est-cta">Book Consultation For This Config</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GLOBAL REACH CLIENT MAP -->
+    <section class="reach-map-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Global Footprint</span>
+          <h2>Interactive Reach Showcase</h2>
+          <p class="section-desc">Hover over coordinates below to view project stats from our distributed collaborative batches.</p>
+        </div>
+
+        <div class="glass-card map-card">
+          <!-- Vector Styled SVG World Map Outline and client nodes -->
+          <svg class="world-map-svg" viewBox="0 0 800 400" width="100%">
+            <!-- Simple dots representing world outline coordinates -->
+            <rect width="800" height="400" fill="none" />
+            <!-- Client coordinates -->
+            <g class="map-nodes">
+              <!-- New York Node -->
+              <g class="map-node" data-location="New York, USA" data-projects="4 Commercial, 2 Research">
+                <circle cx="200" cy="140" r="15" class="radar-pulse" />
+                <circle cx="200" cy="140" r="6" class="core-point" />
+              </g>
+              <!-- London Node -->
+              <g class="map-node" data-location="London, UK" data-projects="3 Commercial, 1 Blockchain">
+                <circle cx="380" cy="120" r="15" class="radar-pulse" />
+                <circle cx="380" cy="120" r="6" class="core-point" />
+              </g>
+              <!-- Bangalore/Hyderabad Node -->
+              <g class="map-node" data-location="Hyderabad & Bangalore, IN" data-projects="26 Academic, 14 SaaS, 8 Web3">
+                <circle cx="560" cy="210" r="18" class="radar-pulse" />
+                <circle cx="560" cy="210" r="7" class="core-point" />
+              </g>
+              <!-- Sydney Node -->
+              <g class="map-node" data-location="Sydney, AU" data-projects="2 Commercial, 1 AI">
+                <circle cx="700" cy="300" r="15" class="radar-pulse" />
+                <circle cx="700" cy="300" r="6" class="core-point" />
+              </g>
+            </g>
+          </svg>
+          <div class="map-hover-bubble" id="map-hover-bubble">Hover over a connection point</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDENT PROJECT PORTAL -->
+    <section class="student-portal-section" id="student-portal">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Academic Submissions</span>
+          <h2>Student Project Intake Portal</h2>
+          <p class="section-desc">Submit your project details. Our intake nodes will analyze your concepts and output an automated architectural roadmap in real time.</p>
+        </div>
+
+        <div class="portal-grid">
+          <div class="portal-info-text">
+            <h3>Rigorous Academic Support</h3>
+            <p>We compile projects matching specific university rubrics. All deliveries include:</p>
+            <ul class="portal-features">
+              <li><span>✓</span> Clean, commented source code files</li>
+              <li><span>✓</span> Standard documentation (IEEE formats or college-specific)</li>
+              <li><span>✓</span> Database schemas and architecture maps</li>
+              <li><span>✓</span> Explanatory screen recording guides</li>
+              <li><span>✓</span> Direct viva preparation documentation</li>
+            </ul>
+            <div class="glass-card quote-notice">
+              <p><strong>Note:</strong> We maintain strict student privacy filters. Individual student identities and specific college locations are kept fully confidential.</p>
+            </div>
+          </div>
+
+          <div class="glass-card portal-form-card">
+            <form id="student-portal-form">
+              <div class="form-row-2">
+                <div class="input-group">
+                  <label for="stu-name">Full Name *</label>
+                  <input type="text" id="stu-name" required placeholder="Confidential name">
+                </div>
+                <div class="input-group">
+                  <label for="stu-college">College Name *</label>
+                  <input type="text" id="stu-college" required placeholder="University or Institution">
+                </div>
+              </div>
+
+              <div class="form-row-3">
+                <div class="input-group">
+                  <label for="stu-branch">Branch *</label>
+                  <select id="stu-branch" required>
+                    <option value="CSE" selected>Computer Science (CSE)</option>
+                    <option value="ECE">Electronics (ECE)</option>
+                    <option value="IT">Information Technology (IT)</option>
+                    <option value="MCA">Applications (MCA)</option>
+                    <option value="Other">Other Branch</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label for="stu-year">Year *</label>
+                  <select id="stu-year" required>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4" selected>4th Year (Final)</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label for="stu-type">Project Type *</label>
+                  <select id="stu-type" required>
+                    <option value="Major" selected>Major Project</option>
+                    <option value="Mini">Mini Project</option>
+                    <option value="Research">Research / IEEE Paper</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="input-group">
+                  <label for="stu-domain">Preferred Domain *</label>
+                  <select id="stu-domain" required>
+                    <option value="Machine Learning" selected>Machine Learning / AI</option>
+                    <option value="Web Development">Full-Stack Web App</option>
+                    <option value="Blockchain">Blockchain & Cryptography</option>
+                    <option value="Cybersecurity">Cybersecurity / Cryptography</option>
+                    <option value="Cloud Computing">Cloud Computing / IoT</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label for="stu-deadline">Target Deadline *</label>
+                  <input type="date" id="stu-deadline" required>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="stu-idea">Project Idea or Description *</label>
+                <textarea id="stu-idea" rows="4" required placeholder="Describe what you want the application to do. For example: A system that segments brain images or an e-commerce platform that uses blockchain for checkout..."></textarea>
+              </div>
+
+              <div class="form-row-2">
+                <div class="input-group">
+                  <label for="stu-budget">Target Budget (INR) *</label>
+                  <select id="stu-budget" required>
+                    <option value="Under 5k">Under 5,000</option>
+                    <option value="5k-10k" selected>5,000 - 10,000</option>
+                    <option value="10k-20k">10,000 - 20,000</option>
+                    <option value="Above 20k">Above 20,000</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label for="stu-upload">Reference Files (Syllabus/IEEE guidelines)</label>
+                  <input type="file" id="stu-upload" class="file-input-field">
+                </div>
+              </div>
+
+              <div class="form-row-3">
+                <div class="input-group">
+                  <label for="stu-contact">Contact Number *</label>
+                  <input type="tel" id="stu-contact" required placeholder="+91 XXXX...">
+                </div>
+                <div class="input-group">
+                  <label for="stu-whatsapp">WhatsApp Number *</label>
+                  <input type="tel" id="stu-whatsapp" required placeholder="For direct communication">
+                </div>
+                <div class="input-group">
+                  <label for="stu-email">Email Address *</label>
+                  <input type="email" id="stu-email" required placeholder="name@domain.com">
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full">
+                <span>Submit Requirements & Start Analysis</span>
+                <i data-lucide="play-circle"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMERCIAL INQUIRY PORTAL -->
+    <section class="commercial-section" id="commercial-inquiry">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Business Inquiries</span>
+          <h2>Commercial Project Inquiry</h2>
+          <p class="section-desc">Submit your project details. We will schedule a scoping call to map out features, milestones, and tech recommendations.</p>
+        </div>
+
+        <div class="glass-card commercial-form-card">
+          <form id="commercial-form">
+            <div class="form-row-2">
+              <div class="input-group">
+                <label for="biz-name">Company Name *</label>
+                <input type="text" id="biz-name" required placeholder="e.g. Acme Corp">
+              </div>
+              <div class="input-group">
+                <label for="biz-industry">Industry *</label>
+                <input type="text" id="biz-industry" required placeholder="e.g. Healthcare, E-Commerce">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="input-group">
+                <label for="biz-type">Website / System Type *</label>
+                <select id="biz-type" required>
+                  <option value="SaaS Platform" selected>SaaS Platform / Admin Portal</option>
+                  <option value="Corporate Website">Corporate Profile Website</option>
+                  <option value="E-Commerce Store">E-Commerce Application</option>
+                  <option value="Custom App">Custom Integration (APIs/Databases)</option>
+                  <option value="Sleek Landing Page">Minimal Template Adaptation</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="biz-timeline">Expected Timeline *</label>
+                <select id="biz-timeline" required>
+                  <option value="Under 1 month">Under 1 Month (Fast-track)</option>
+                  <option value="1-2 months" selected>1 to 2 Months</option>
+                  <option value="2-4 months">2 to 4 Months</option>
+                  <option value="Ongoing partner">Ongoing Support / Retainer</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="biz-features">Core Features Required *</label>
+              <textarea id="biz-features" rows="3" required placeholder="Briefly describe critical modules, e.g. payment setup, OAuth roles, real-time sync charts..."></textarea>
+            </div>
+
+            <div class="form-row-3">
+              <div class="input-group checkbox-cell">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="biz-hosting">
+                  <span>Need Hosting Setup</span>
+                </label>
+              </div>
+              <div class="input-group checkbox-cell">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="biz-maint">
+                  <span>Need Ongoing Maintenance</span>
+                </label>
+              </div>
+              <div class="input-group">
+                <label for="biz-size">Company Size</label>
+                <select id="biz-size">
+                  <option value="1-5">1 - 5 (Startup)</option>
+                  <option value="6-20" selected>6 - 20 (SMB)</option>
+                  <option value="21-100">21 - 100</option>
+                  <option value="Above 100">100+ Enterprise</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-3">
+              <div class="input-group">
+                <label for="biz-contact-name">Contact Person Name *</label>
+                <input type="text" id="biz-contact-name" required placeholder="Your name">
+              </div>
+              <div class="input-group">
+                <label for="biz-email">Contact Email *</label>
+                <input type="email" id="biz-email" required placeholder="name@company.com">
+              </div>
+              <div class="input-group">
+                <label for="biz-phone">Phone Number *</label>
+                <input type="tel" id="biz-phone" required placeholder="Contact info">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              <span>Request Custom Proposal Draft</span>
+              <i data-lucide="calendar"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE STUDIO JOURNEY TIMELINE -->
+    <section class="journey-timeline-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Our Path</span>
+          <h2>Milestones & Growth</h2>
+        </div>
+
+        <div class="timeline-container">
+          <div class="timeline-line"></div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card-wrapper">
+              <div class="glass-card timeline-card">
+                <span class="timeline-date">2020 - 2021</span>
+                <h3>Genesis Node</h3>
+                <p>Formed collaborative networks across three batch graduates. Built basic client websites, local databases, and mini academic structures.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card-wrapper">
+              <div class="glass-card timeline-card">
+                <span class="timeline-date">2022 - 2023</span>
+                <h3>SaaS Scalability</h3>
+                <p>Expanded to construct enterprise admin portals, CRM dashboards, and deployed multi-tenant backend architectures on AWS.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card-wrapper">
+              <div class="glass-card timeline-card">
+                <span class="timeline-date">2024 - 2025</span>
+                <h3>AI & Smart Integrations</h3>
+                <p>Integrated conversational LLM pipelines, autonomous execution agents, and customized blockchain verification networks for students and corporations.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card-wrapper">
+              <div class="glass-card timeline-card">
+                <span class="timeline-date">Present (2026-2028)</span>
+                <h3>Hyper-efficient Delivery</h3>
+                <p>Deploying highly optimized light-weight UI code, utilizing advanced custom local estimators, and serving international nodes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AWARDS & RECOGNITION SECTION -->
+    <section class="awards-section" id="awards">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Achievements</span>
+          <h2>Awards & Recognition</h2>
+        </div>
+        <div class="awards-grid">
+          <div class="glass-card award-card">
+            <span class="award-year">2023</span>
+            <h4>First Prize - National Smart India Hackathon</h4>
+            <p>Our core team graduates engineered an AI-powered logistics routing framework matching enterprise SLA parameters.</p>
+          </div>
+          <div class="glass-card award-card">
+            <span class="award-year">2024</span>
+            <h4>IEEE Research Recognition Certificate</h4>
+            <p>Awarded for design architectures of scalable cloud-native databases presented at the International Cloud Engineering Symposia.</p>
+          </div>
+          <div class="glass-card award-card">
+            <span class="award-year">2025</span>
+            <h4>Best Collaborative Collective Recognition</h4>
+            <p>Acknowledged by major educational incubator hubs for bridging academic mentoring with industrial development standards.</p>
+          </div>
+          <div class="glass-card award-card">
+            <span class="award-year">2026</span>
+            <h4>Innovation Excellence Award</h4>
+            <p>Recognized for engineering a streamlined, zero-bloat project planner utilized by over 50 university research programs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="testimonials-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Reviews</span>
+          <h2>Client Feedback</h2>
+        </div>
+
+        <div class="testimonials-grid">
+          <!-- Student review -->
+          <div class="glass-card testimonial-card">
+            <div class="test-header">
+              <div class="test-avatar">CS</div>
+              <div>
+                <h4>Confidential Student</h4>
+                <p class="test-sub">Final Year CSE Student</p>
+              </div>
+            </div>
+            <p class="test-body">"I was struggling with my major IEEE research project on ML image segmentation. Studio Website built a complete working system with beautiful charts, commented code, and a structured report that made my submission stress-free."</p>
+            <div class="test-rating">★★★★★</div>
+          </div>
+
+          <!-- Business review -->
+          <div class="glass-card testimonial-card">
+            <div class="test-header">
+              <div class="test-avatar">AC</div>
+              <div>
+                <h4>Anish C.</h4>
+                <p class="test-sub">Founder, Velocity Fit</p>
+              </div>
+            </div>
+            <p class="test-body">"Their templates are amazing. We selected a fit landing page design and they customized the scheduling and trainer dashboard within 3 days. Extremely professional and performant."</p>
+            <div class="test-rating">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS (HOW WE WORK) SECTION -->
+    <section class="process-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Workflow</span>
+          <h2>Engineering Life Cycle</h2>
+        </div>
+
+        <div class="process-grid">
+          <div class="process-step">
+            <div class="step-num">01</div>
+            <h3>Intake & Scope</h3>
+            <p>Evaluate form inputs or estimators to configure specs, outline complexity, and compile roadmaps.</p>
+          </div>
+          <div class="process-arrow"><i data-lucide="chevrons-right"></i></div>
+          <div class="process-step">
+            <div class="step-num">02</div>
+            <h3>Figma Blueprint</h3>
+            <p>Assemble minimal custom prototypes in Figma for feedback prior to coding elements.</p>
+          </div>
+          <div class="process-arrow"><i data-lucide="chevrons-right"></i></div>
+          <div class="process-step">
+            <div class="step-num">03</div>
+            <h3>Robust Code</h3>
+            <p>Deploy clean structure using modern CSS, secure database layers, and efficient logic scripts.</p>
+          </div>
+          <div class="process-arrow"><i data-lucide="chevrons-right"></i></div>
+          <div class="process-step">
+            <div class="step-num">04</div>
+            <h3>QA & Handoff</h3>
+            <p>Run rigorous testing procedures, compile documentation, and transition codebase assets to client.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">FAQ</span>
+          <h2>Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-accordion">
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span>Do you provide full source code?</span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            <div class="faq-content">
+              <p>Yes. Every single line of custom source code is handed over directly to the client with full configuration details. We do not lock you into proprietary hosting ecosystems.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span>How long does a template deployment take?</span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            <div class="faq-content">
+              <p>Our standard pre-built templates can be customized with your brand logo, color configurations, and content sheets, then launched on your custom domain in under 48 hours.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span>Do you support final year IEEE projects and reports?</span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            <div class="faq-content">
+              <p>Absolutely. We formulate rigorous architectures matching computer science and electronics guidelines, including database design maps, full codebases, and comprehensive formatting matching IEEE standards.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span>Are student identities and project details kept private?</span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            <div class="faq-content">
+              <p>Yes, we enforce complete anonymity. Student names, institution names, and reference documents are filtered and never revealed online or to external partners.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT DETAILS & FORM -->
+    <section class="contact-section" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Get in Touch</span>
+          <h2>Let's Engineer Your Solutions</h2>
+          <p class="section-desc">Fill out the form above or reach out directly through our collaborative nodes.</p>
+        </div>
+
+        <div class="contact-box glass-card">
+          <div class="contact-details">
+            <h3>Quick Connections</h3>
+            <p>Our team responds to active inquiries within 2 hours.</p>
+            
+            <div class="contact-links">
+              <a href="https://wa.me/919999999999" target="_blank" class="contact-link-item">
+                <i data-lucide="message-square"></i>
+                <div>
+                  <strong>WhatsApp</strong>
+                  <span>+91 99999 99999</span>
+                </div>
+              </a>
+
+              <a href="mailto:collab@studiowebsite.in" class="contact-link-item">
+                <i data-lucide="mail"></i>
+                <div>
+                  <strong>Email Us</strong>
+                  <span>collab@studiowebsite.in</span>
+                </div>
+              </a>
+              <a href="https://linkedin.com" target="_blank" class="contact-link-item">
+                <i data-lucide="linkedin"></i>
+                <div>
+                  <strong>LinkedIn</strong>
+                  <span>Studio Website</span>
+                </div>
+              </a>
+            </div>
+
+            <div class="work-hours">
+              <p><strong>Intake Hours:</strong> 9:00 AM - 10:00 PM IST</p>
+              <p><strong>System Uptime:</strong> 24 / 7 / 365</p>
+            </div>
+          </div>
+
+          <div class="contact-cta-wrapper">
+            <h3>Ready to Kickoff?</h3>
+            <p>Submit details in the Student Portal or Commercial Inquiry sections above to trigger our intake nodes immediately.</p>
+            <div class="cta-btns">
+              <a href="#student-portal" class="btn btn-primary">Go to Student Portal</a>
+              <a href="#commercial-inquiry" class="btn btn-secondary">Go to Business Inquiry</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo-link">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">STUDIO<span class="highlight">WEBSITE</span></span>
+        </a>
+        <p>Premium Apple-inspired engineering collective delivering clean applications and robust academic solutions.</p>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#about">About Studio</a></li>
+          <li><a href="#services">Capabilities</a></li>
+          <li><a href="#portfolio">Our Work</a></li>
+          <li><a href="#templates">Ready Templates</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Agreement</a></li>
+          <li><a href="#">Code Quality Clause</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Studio Website. All rights reserved. Managed by Graduates 2020-2028.</p>
+    </div>
+  </footer>
+
+  <!-- DYNAMIC MODAL / DIALOG DICTIONARY -->
+
+  <!-- STUDENT PORTAL AUTO-RESPONSE DIALOG (TERMINAL INTERACTIVE blueprints) -->
+  <dialog id="student-ai-modal" class="glass-modal">
+    <div class="modal-header">
+      <div class="modal-title-wrapper">
+        <span class="modal-status-indicator"></span>
+        <h3 id="modal-terminal-title">AI Intake Engine</h3>
+      </div>
+      <button commandfor="student-ai-modal" command="close" class="icon-btn close-modal-btn" aria-label="Close modal">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body-container">
+      <div class="terminal-container">
+        <div class="terminal-bar">
+          <div class="terminal-dots">
+            <span class="t-dot t-red"></span>
+            <span class="t-dot t-yellow"></span>
+            <span class="t-dot t-green"></span>
+          </div>
+          <span class="terminal-title">intake_agent.sh</span>
+        </div>
+        <div class="terminal-screen" id="terminal-screen-output">
+          <!-- Text dynamically updates in app.js -->
+        </div>
+      </div>
+
+      <div class="modal-actions-container hidden" id="modal-blueprint-actions">
+        <button id="btn-download-blueprint" class="btn btn-secondary">
+          <i data-lucide="download"></i>
+          <span>Save Proposal PDF</span>
+        </button>
+        <a id="btn-whatsapp-blueprint" target="_blank" class="btn btn-primary">
+          <i data-lucide="message-square"></i>
+          <span>Start Project on WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- SUCCESS NOTIFICATION MODAL -->
+  <dialog id="success-notification-modal" class="glass-modal" style="max-width: 440px;">
+    <div class="modal-header">
+      <div class="terminal-dots">
+        <span class="t-dot t-red"></span>
+        <span class="t-dot t-yellow"></span>
+        <span class="t-dot t-green"></span>
+      </div>
+      <span class="terminal-title" style="margin-left: 10px;">success_alert.sh</span>
+      <button onclick="document.getElementById('success-notification-modal').close()" class="icon-btn" aria-label="Close modal" style="margin-left: auto;">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div style="padding: var(--space-4) 0 0 0; text-align: center; display: flex; flex-direction: column; gap: var(--space-3); align-items: center;">
+      <div style="background: oklch(from var(--color-success) l c h / 0.1); border: 1px solid var(--color-success); color: var(--color-success); width: 44px; height: 44px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold;">
+        ✓
+      </div>
+      <h3 id="notification-modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em;">Inquiry Transmitted</h3>
+      <p id="notification-modal-message" style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--text-dim);"></p>
+      <button onclick="document.getElementById('success-notification-modal').close()" class="btn btn-primary btn-full" style="margin-top: var(--space-2); height: 40px; justify-content: center;">
+        Acknowledge Status
+      </button>
+    </div>
+  </dialog>
+
+  <!-- TEMPLATE PREVIEW POPUP -->
+  <dialog id="template-preview-modal" class="glass-modal preview-modal">
+    <div class="modal-header">
+      <h3 id="preview-modal-title">Template Active Preview</h3>
+      <button commandfor="template-preview-modal" command="close" class="icon-btn close-modal-btn" aria-label="Close modal">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="preview-iframe-wrapper">
+      <div class="preview-browser-bar">
+        <div class="preview-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="preview-address" id="preview-browser-address">https://velocityfit.template.studiowebsite.in</div>
+      </div>
+      <!-- Mock live view inside container -->
+      <div class="preview-frame-content" id="preview-frame-content">
+        <!-- Render custom mockup HTML content dynamically based on selected template -->
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Core Javascript File -->
+  <script src="app.js"></script>
+</body>
+</html>
