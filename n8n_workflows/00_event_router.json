@@ -1,0 +1,127 @@
+{
+  "name": "Agency OS - 00 Event Router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "event-router",
+        "options": {}
+      },
+      "name": "Incoming Event Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.body.event_type }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "PROJECT_CREATED",
+              "output": 0
+            },
+            {
+              "value2": "STAGE_STARTED",
+              "output": 1
+            },
+            {
+              "value2": "STAGE_COMPLETED",
+              "output": 1
+            },
+            {
+              "value2": "TASK_ASSIGNED",
+              "output": 2
+            },
+            {
+              "value2": "TIMELINE_UPDATED",
+              "output": 3
+            }
+          ]
+        }
+      },
+      "name": "Event Type Switch Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://localhost:5678/webhook/01-provision-project",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{ JSON.stringify($json.body) }}"
+      },
+      "name": "Route -> 01 Projects (Provisioning)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [750, 150]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://localhost:5678/webhook/02-stage-transition",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{ JSON.stringify($json.body) }}"
+      },
+      "name": "Route -> 02 Stage & Timeline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://localhost:5678/webhook/03-task-alert",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{ JSON.stringify($json.body) }}"
+      },
+      "name": "Route -> 03 Task WhatsApp Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [750, 450]
+    }
+  ],
+  "connections": {
+    "Incoming Event Webhook": {
+      "main": [
+        [
+          {
+            "node": "Event Type Switch Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event Type Switch Router": {
+      "main": [
+        [
+          {
+            "node": "Route -> 01 Projects (Provisioning)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Route -> 02 Stage & Timeline",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Route -> 03 Task WhatsApp Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

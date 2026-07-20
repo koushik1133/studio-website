@@ -1,5 +1,5 @@
 -- ============================================================================
--- AGENCY OPERATING SYSTEM (AGENCY OS) - SUPABASE POSTGRESQL MIGRATION
+-- AGENCY OPERATING SYSTEM (AGENCY OS) - REFINED POSTGRESQL MIGRATION
 -- ============================================================================
 
 -- Enable required extensions
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS public.inquiries (
 );
 
 -- ----------------------------------------------------------------------------
--- 2. PROJECTS TABLE (Core Master Entities)
+-- 2. PROJECTS TABLE (14-Stage Lifecycle Master Entities)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.projects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -35,7 +35,11 @@ CREATE TABLE IF NOT EXISTS public.projects (
   title VARCHAR(255) NOT NULL,
   client_id UUID REFERENCES public.inquiries(id) ON DELETE SET NULL,
   category VARCHAR(50) NOT NULL,
-  stage VARCHAR(50) DEFAULT 'discovery' CHECK (stage IN ('discovery', 'research', 'ui_ux', 'development', 'testing', 'deployed')),
+  stage VARCHAR(50) DEFAULT 'lead' CHECK (stage IN (
+    'lead', 'discovery', 'research', 'planning', 'ui', 'ux',
+    'development', 'internal_qa', 'human_qa', 'client_review',
+    'deployment', 'maintenance', 'completed', 'cancelled'
+  )),
   assigned_dev_id VARCHAR(100),
   internal_priority VARCHAR(20) DEFAULT 'medium' CHECK (internal_priority IN ('low', 'medium', 'high', 'urgent')),
   target_deadline DATE,
@@ -46,13 +50,14 @@ CREATE TABLE IF NOT EXISTS public.projects (
 );
 
 -- ----------------------------------------------------------------------------
--- 3. PROJECT MILESTONES TABLE (Public & Internal Timelines)
+-- 3. PROJECT MILESTONES TABLE (Timeline Source of Truth)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.project_milestones (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
   description TEXT,
+  stage VARCHAR(50),
   is_completed BOOLEAN DEFAULT FALSE,
   completed_at TIMESTAMPTZ,
   is_client_visible BOOLEAN DEFAULT TRUE,
@@ -78,15 +83,32 @@ CREATE TABLE IF NOT EXISTS public.tasks (
 );
 
 -- ----------------------------------------------------------------------------
--- 5. AUDIT LOGS & NOTIFICATIONS TABLE
+-- 5. SYSTEM EVENTS TABLE (n8n 00 Event Router Source)
 -- ----------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.audit_logs (
+CREATE TABLE IF NOT EXISTS public.system_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  event_type VARCHAR(100) NOT NULL,
-  entity_type VARCHAR(50) NOT NULL,
+  event_type VARCHAR(100) NOT NULL, -- e.g., 'PROJECT_CREATED', 'STAGE_STARTED', 'TASK_ASSIGNED'
+  entity_type VARCHAR(50) NOT NULL,  -- 'project', 'task', 'inquiry', 'meeting'
   entity_id UUID,
-  payload JSONB DEFAULT '{}'::jsonb,
-  triggered_by VARCHAR(100) DEFAULT 'system',
+  payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+  is_processed BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ----------------------------------------------------------------------------
+-- 6. NOTIFICATION QUEUE TABLE (Notification Service Abstraction)
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.notification_queue (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  recipient VARCHAR(255) NOT NULL,
+  channel VARCHAR(50) DEFAULT 'whatsapp' CHECK (channel IN ('whatsapp', 'email', 'telegram', 'slack')),
+  message_type VARCHAR(50) NOT NULL, -- 'internal_dev', 'client_update', 'reminder'
+  body TEXT NOT NULL,
+  provider VARCHAR(50) DEFAULT 'whatsapp_cloud_api',
+  status VARCHAR(50) DEFAULT 'queued' CHECK (status IN ('queued', 'sent', 'failed', 'retrying')),
+  retry_count INT DEFAULT 0,
+  error_log TEXT,
+  sent_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -96,8 +118,8 @@ CREATE TABLE IF NOT EXISTS public.audit_logs (
 CREATE INDEX IF NOT EXISTS idx_inquiries_type_status ON public.inquiries(type, status);
 CREATE INDEX IF NOT EXISTS idx_projects_code ON public.projects(project_code);
 CREATE INDEX IF NOT EXISTS idx_projects_stage ON public.projects(stage);
-CREATE INDEX IF NOT EXISTS idx_milestones_project ON public.project_milestones(project_id);
-CREATE INDEX IF NOT EXISTS idx_tasks_project_stage ON public.tasks(project_id, stage);
+CREATE INDEX IF NOT EXISTS idx_events_unprocessed ON public.system_events(is_processed, created_at);
+CREATE INDEX IF NOT EXISTS idx_notifications_status ON public.notification_queue(status);
 
 -- ----------------------------------------------------------------------------
 -- AUTOMATIC TIMESTAMP UPDATER TRIGGER
@@ -122,7 +144,8 @@ ALTER TABLE public.inquiries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.project_milestones ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.system_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.notification_queue ENABLE ROW LEVEL SECURITY;
 
 -- Anonymous public inserts for form submissions
 CREATE POLICY "Allow public intake form inserts" ON public.inquiries FOR INSERT WITH CHECK (true);
@@ -135,4 +158,5 @@ CREATE POLICY "Service role full access on inquiries" ON public.inquiries FOR AL
 CREATE POLICY "Service role full access on projects" ON public.projects FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "Service role full access on milestones" ON public.project_milestones FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "Service role full access on tasks" ON public.tasks FOR ALL USING (auth.role() = 'service_role');
-CREATE POLICY "Service role full access on audit_logs" ON public.audit_logs FOR ALL USING (auth.role() = 'service_role');
+CREATE POLICY "Service role full access on system_events" ON public.system_events FOR ALL USING (auth.role() = 'service_role');
+CREATE POLICY "Service role full access on notification_queue" ON public.notification_queue FOR ALL USING (auth.role() = 'service_role');
