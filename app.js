@@ -721,9 +721,34 @@ Select "Start Project on WhatsApp" to verify schedule!
       const response = await fetch(`/api/milestone?code=${encodeURIComponent(projectCode)}`);
       const data = await response.json();
 
-      if (data.success && data.milestones) {
+      const renderNotFound = (code, nextSteps) => {
+        const stepsList = (nextSteps || [
+          'Verify your Project Code format (e.g., STD-84920 or STD-92140).',
+          'If you recently submitted an intake form, allow up to 15 minutes for system provisioning.',
+          'Reach out to our engineering team on WhatsApp or Email for instant tracking assistance.'
+        ]).map(step => `<li><i data-lucide="info" style="width:16px; height:16px; margin-right:8px; display:inline-block; vertical-align:middle;"></i> ${step}</li>`).join('');
+
+        trackerResults.innerHTML = `
+          <div class="tracker-not-found-card glass-card" style="padding: var(--space-6); border-radius: var(--radius-md); border-left: 4px solid var(--text-dim, #999);">
+            <div style="margin-bottom: var(--space-4);">
+              <span class="status-badge" style="background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-family: var(--font-mono); font-weight: 600;">NO MATCH FOUND</span>
+              <h3 style="margin-top: var(--space-2); font-size: 1.25rem;">No Active Project Found for ID: "<code>${code}</code>"</h3>
+            </div>
+            <p style="color: var(--text-dim); margin-bottom: var(--space-4); font-size: 0.9rem;">We couldn't locate any active project matching this code in our system database.</p>
+            <div class="next-steps-container" style="background: var(--bg-surface-elevated); padding: var(--space-4); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <h4 style="margin: 0 0 var(--space-2) 0; font-size: 0.95rem; font-weight: 600;">Recommended Next Steps:</h4>
+              <ul style="margin: 0; padding-left: 0; list-style: none; font-size: 0.88rem; color: var(--text-dim); display: flex; flex-direction: column; gap: 8px;">
+                ${stepsList}
+              </ul>
+            </div>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+      };
+
+      if (data.success && data.milestones && data.milestones.length > 0) {
         trackerResults.innerHTML = '';
-        data.milestones.forEach((item, index) => {
+        data.milestones.forEach((item) => {
           const milestoneDiv = document.createElement('div');
           milestoneDiv.className = `tracker-milestone-item ${item.is_completed ? 'completed' : 'pending'}`;
           milestoneDiv.innerHTML = `
@@ -737,31 +762,69 @@ Select "Start Project on WhatsApp" to verify schedule!
           trackerResults.appendChild(milestoneDiv);
         });
       } else {
-        trackerResults.innerHTML = `<div class="log-line text-muted">No milestone data found for code "${projectCode}".</div>`;
+        renderNotFound(projectCode, data.next_steps);
       }
     } catch (err) {
-      // Fallback mock rendering for local dev testing
-      const defaultMock = [
-        { title: 'Requirements Received', description: 'Student scoping intake form processed.', is_completed: true, timestamp: '09:12 AM' },
-        { title: 'Research Phase Completed', description: 'IEEE paper standards & architecture finalized.', is_completed: true, timestamp: '11:30 AM' },
-        { title: 'UI/UX Design Approved', description: 'Dashboard wireframes & templates approved.', is_completed: true, timestamp: '04:05 PM' },
-        { title: 'Development Phase', description: 'Building custom backend & smart contract endpoints.', is_completed: false, timestamp: 'In Progress' },
-        { title: 'Testing & Handoff', description: 'Executing QA procedures & documentation handoff.', is_completed: false, timestamp: 'Upcoming' }
-      ];
-      trackerResults.innerHTML = '';
-      defaultMock.forEach(item => {
-        const milestoneDiv = document.createElement('div');
-        milestoneDiv.className = `tracker-milestone-item ${item.is_completed ? 'completed' : 'pending'}`;
-        milestoneDiv.innerHTML = `
-          <div class="milestone-icon">${item.is_completed ? '✔' : '⏳'}</div>
-          <div class="milestone-details">
-            <h4>${item.title}</h4>
-            <p>${item.description}</p>
+      // Local fallback checking for valid sample codes or rendering Not Found card
+      const SAMPLE_LOOKUP = {
+        'STD-84920': [
+          { title: 'Requirements Received', description: 'Student scoping intake form processed.', is_completed: true, timestamp: '2026-07-16 09:12 AM' },
+          { title: 'Research Phase Completed', description: 'IEEE paper standards and IPFS node architecture finalized.', is_completed: true, timestamp: '2026-07-17 11:30 AM' },
+          { title: 'UI/UX Design Approved', description: 'Dashboard wireframes and verified certificate templates approved.', is_completed: true, timestamp: '2026-07-18 04:05 PM' },
+          { title: 'Smart Contract Development', description: 'Compiling Solidity contracts on Ethereum Sepolia testnet.', is_completed: false, timestamp: 'Next Day' },
+          { title: 'Testing & Verification', description: 'Executing unit tests and generating IEEE report.', is_completed: false, timestamp: 'Pending' },
+          { title: 'Final Deployment & Code Handoff', description: 'Deploying live site and packaging zip deliverables.', is_completed: false, timestamp: 'Pending' }
+        ],
+        'STD-92140': [
+          { title: 'Discovery Meeting Completed', description: 'Initial scoping call & feature list finalized.', is_completed: true, timestamp: '2026-07-18 10:00 AM' },
+          { title: 'Research Started', description: 'Analyzing restaurant POS integration protocols.', is_completed: true, timestamp: '2026-07-19 02:15 PM' },
+          { title: 'UI Design Phase', description: 'Designing responsive dark-mode ordering interface.', is_completed: false, timestamp: 'In Progress' },
+          { title: 'Development Phase', description: 'Building Next.js frontend and payment gateway endpoints.', is_completed: false, timestamp: 'Pending' },
+          { title: 'Client Review', description: 'Staging deployment preview for owner feedback.', is_completed: false, timestamp: 'Pending' },
+          { title: 'Production Deployment', description: 'Domain configuration & SSL certificate issuance.', is_completed: false, timestamp: 'Pending' }
+        ]
+      };
+
+      const milestones = SAMPLE_LOOKUP[projectCode];
+      if (milestones) {
+        trackerResults.innerHTML = '';
+        milestones.forEach(item => {
+          const milestoneDiv = document.createElement('div');
+          milestoneDiv.className = `tracker-milestone-item ${item.is_completed ? 'completed' : 'pending'}`;
+          milestoneDiv.innerHTML = `
+            <div class="milestone-icon">${item.is_completed ? '✔' : '⏳'}</div>
+            <div class="milestone-details">
+              <h4>${item.title}</h4>
+              <p>${item.description}</p>
+            </div>
+            <div class="milestone-timestamp">${item.timestamp}</div>
+          `;
+          trackerResults.appendChild(milestoneDiv);
+        });
+      } else {
+        const stepsList = [
+          'Verify your Project Code format (e.g. STD-84920 or STD-92140).',
+          'If you recently submitted an intake form, allow up to 15 minutes for system provisioning.',
+          'Reach out to our engineering team on WhatsApp or Email for instant tracking assistance.'
+        ].map(step => `<li><i data-lucide="info" style="width:16px; height:16px; margin-right:8px; display:inline-block; vertical-align:middle;"></i> ${step}</li>`).join('');
+
+        trackerResults.innerHTML = `
+          <div class="tracker-not-found-card glass-card" style="padding: var(--space-6); border-radius: var(--radius-md); border-left: 4px solid var(--text-dim, #999);">
+            <div style="margin-bottom: var(--space-4);">
+              <span class="status-badge" style="background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-family: var(--font-mono); font-weight: 600;">NO MATCH FOUND</span>
+              <h3 style="margin-top: var(--space-2); font-size: 1.25rem;">No Active Project Found for ID: "<code>${projectCode}</code>"</h3>
+            </div>
+            <p style="color: var(--text-dim); margin-bottom: var(--space-4); font-size: 0.9rem;">We couldn't locate any active project matching this code in our system database.</p>
+            <div class="next-steps-container" style="background: var(--bg-surface-elevated); padding: var(--space-4); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <h4 style="margin: 0 0 var(--space-2) 0; font-size: 0.95rem; font-weight: 600;">Recommended Next Steps:</h4>
+              <ul style="margin: 0; padding-left: 0; list-style: none; font-size: 0.88rem; color: var(--text-dim); display: flex; flex-direction: column; gap: 8px;">
+                ${stepsList}
+              </ul>
+            </div>
           </div>
-          <div class="milestone-timestamp">${item.timestamp}</div>
         `;
-        trackerResults.appendChild(milestoneDiv);
-      });
+        if (window.lucide) window.lucide.createIcons();
+      }
     }
   };
 

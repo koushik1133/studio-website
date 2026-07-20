@@ -29,12 +29,19 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Project code parameter missing (e.g., ?code=STD-84920)' });
   }
 
-  const milestones = SAMPLE_PROJECT_MILESTONES[code] || [
-    { title: 'Requirements Received', description: 'Inquiry registered into agency queue.', is_completed: true, timestamp: 'Just now' },
-    { title: 'Discovery & Research', description: 'Technical scoping & stack selection.', is_completed: false, timestamp: 'Upcoming' },
-    { title: 'UI & Development', description: 'Building custom interface & API integration.', is_completed: false, timestamp: 'Upcoming' },
-    { title: 'Deployment', description: 'Testing, handoff, and live launch.', is_completed: false, timestamp: 'Upcoming' }
-  ];
+  const milestones = SAMPLE_PROJECT_MILESTONES[code];
+
+  if (!milestones) {
+    return res.status(404).json({
+      success: false,
+      error: `No project found matching tracking ID "${code}".`,
+      next_steps: [
+        'Verify your Project Code (e.g., STD-84920 or STD-92140).',
+        'If you recently submitted an intake form, allow up to 15 minutes for system provisioning.',
+        'Contact our team via WhatsApp or Email for instant tracking assistance.'
+      ]
+    });
+  }
 
   return res.status(200).json({
     success: true,
