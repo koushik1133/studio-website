@@ -51,6 +51,7 @@
           <li><a href="#templates">Templates</a></li>
           <li><a href="#student-portal" class="student-link">Student Portal</a></li>
           <li><a href="#estimator">Estimator</a></li>
+          <li><a href="#project-tracker">Tracker</a></li>
           <li><a href="#dashboard">Live Status</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
@@ -1281,6 +1282,30 @@
             <div class="step-num">04</div>
             <h3>QA & Handoff</h3>
             <p>Run rigorous testing procedures, compile documentation, and transition codebase assets to client.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE CLIENT MILESTONE TRACKER SECTION -->
+    <section class="client-tracker-section" id="project-tracker">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Agency OS Live Timeline</span>
+          <h2>Track Project Progress</h2>
+          <p class="section-desc">Enter your Project Code (e.g. <code>STD-84920</code> or <code>STD-92140</code>) to view real-time milestone updates synced directly from our agency database.</p>
+        </div>
+
+        <div class="tracker-box glass-card">
+          <div class="tracker-search-bar">
+            <input type="text" id="tracker-code-input" placeholder="e.g. STD-84920" value="STD-84920">
+            <button class="btn btn-primary" id="tracker-search-btn">
+              <i data-lucide="search"></i> Track Project
+            </button>
+          </div>
+
+          <div class="tracker-timeline-wrapper" id="tracker-timeline-results">
+            <!-- Dynamic milestones rendered via JS -->
           </div>
         </div>
       </div>

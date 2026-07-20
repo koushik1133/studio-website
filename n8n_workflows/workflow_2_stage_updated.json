@@ -1,0 +1,80 @@
+{
+  "name": "Agency OS - Workflow 2: Stage Transition & Dual WhatsApp Dispatch",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stage-update",
+        "options": {}
+      },
+      "name": "Webhook (Stage Update)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const item = $json.body;\nconst code = item.project_code;\nconst stage = item.new_stage;\nconst milestone = item.milestone_title;\n\n// 1. Client Message (Filtered, friendly, no internal notes)\nconst clientMessage = `Hi 👋\\n\\n*Project Update* (${code})\\n\\n✔ ${milestone}\\n\\nWe are now progressing with the *${stage.toUpperCase()}* phase.\\n\\nThank you,\\n*Studio Website*`;\n\n// 2. Internal Developer Message (Technical context & priority)\nconst internalMessage = `🔔 *Stage Transition Alert*\\n\\n*Project:* ${code}\\n*New Stage:* ${stage}\\n*Milestone Completed:* ${milestone}\\n\\nPlease review Kanban tasks & start sprint deliverables.`;\n\nreturn [{ json: { clientMessage, internalMessage, code } }];"
+      },
+      "name": "Dual Channel Message Formatter",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.whatsapp.com/v1/messages",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"CLIENT_PHONE_NUMBER\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"{{ $json.clientMessage }}\" }\n}"
+      },
+      "name": "WhatsApp - Client Dispatch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [720, 200]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.whatsapp.com/v1/messages",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"TEAM_WHATSAPP_GROUP\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"{{ $json.internalMessage }}\" }\n}"
+      },
+      "name": "WhatsApp - Team Dispatch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [720, 400]
+    }
+  ],
+  "connections": {
+    "Webhook (Stage Update)": {
+      "main": [
+        [
+          {
+            "node": "Dual Channel Message Formatter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dual Channel Message Formatter": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp - Client Dispatch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "WhatsApp - Team Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

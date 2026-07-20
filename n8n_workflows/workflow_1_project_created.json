@@ -1,0 +1,62 @@
+{
+  "name": "Agency OS - Workflow 1: Project Created & Provisioned",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-created",
+        "options": {}
+      },
+      "name": "Supabase Webhook (Project Created)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const item = $json.body;\nconst code = item.project_code || 'STD-00000';\nconst title = item.title || 'Untitled Project';\nconst dev = item.assigned_dev_id || 'Team';\nconst deadline = item.target_deadline || 'TBD';\n\nconst devMessage = `⚡ *New Task Assigned*\\n\\n*Project:* ${title} (${code})\\n*Stage:* Discovery\\n*Assigned to:* ${dev}\\n*Deadline:* ${deadline}\\n*Priority:* High\\n\\n*Open Project Dashboard:* https://dashboard.studiowebsite.in/projects/${code}`;\n\nreturn [{ json: { devMessage, recipient: dev } }];"
+      },
+      "name": "Format Team WhatsApp Payload",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.whatsapp.com/v1/messages",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.recipient }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"{{ $json.devMessage }}\" }\n}"
+      },
+      "name": "WhatsApp Provider Node (Internal)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [700, 300]
+    }
+  ],
+  "connections": {
+    "Supabase Webhook (Project Created)": {
+      "main": [
+        [
+          {
+            "node": "Format Team WhatsApp Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Team WhatsApp Payload": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Provider Node (Internal)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

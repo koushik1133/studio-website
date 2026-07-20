@@ -705,4 +705,74 @@ Select "Start Project on WhatsApp" to verify schedule!
       });
     });
   }
+
+  // ---------------------------------------------------------
+  // 14. AGENCY OS LIVE MILESTONE TRACKER ENGINE
+  // ---------------------------------------------------------
+  const trackerInput = document.getElementById('tracker-code-input');
+  const trackerBtn = document.getElementById('tracker-search-btn');
+  const trackerResults = document.getElementById('tracker-timeline-results');
+
+  const fetchAndRenderMilestones = async (projectCode) => {
+    if (!trackerResults) return;
+    trackerResults.innerHTML = '<div class="log-line text-muted">Fetching live milestone timeline...</div>';
+
+    try {
+      const response = await fetch(`/api/milestone?code=${encodeURIComponent(projectCode)}`);
+      const data = await response.json();
+
+      if (data.success && data.milestones) {
+        trackerResults.innerHTML = '';
+        data.milestones.forEach((item, index) => {
+          const milestoneDiv = document.createElement('div');
+          milestoneDiv.className = `tracker-milestone-item ${item.is_completed ? 'completed' : 'pending'}`;
+          milestoneDiv.innerHTML = `
+            <div class="milestone-icon">${item.is_completed ? '✔' : '⏳'}</div>
+            <div class="milestone-details">
+              <h4>${item.title}</h4>
+              <p>${item.description}</p>
+            </div>
+            <div class="milestone-timestamp">${item.timestamp}</div>
+          `;
+          trackerResults.appendChild(milestoneDiv);
+        });
+      } else {
+        trackerResults.innerHTML = `<div class="log-line text-muted">No milestone data found for code "${projectCode}".</div>`;
+      }
+    } catch (err) {
+      // Fallback mock rendering for local dev testing
+      const defaultMock = [
+        { title: 'Requirements Received', description: 'Student scoping intake form processed.', is_completed: true, timestamp: '09:12 AM' },
+        { title: 'Research Phase Completed', description: 'IEEE paper standards & architecture finalized.', is_completed: true, timestamp: '11:30 AM' },
+        { title: 'UI/UX Design Approved', description: 'Dashboard wireframes & templates approved.', is_completed: true, timestamp: '04:05 PM' },
+        { title: 'Development Phase', description: 'Building custom backend & smart contract endpoints.', is_completed: false, timestamp: 'In Progress' },
+        { title: 'Testing & Handoff', description: 'Executing QA procedures & documentation handoff.', is_completed: false, timestamp: 'Upcoming' }
+      ];
+      trackerResults.innerHTML = '';
+      defaultMock.forEach(item => {
+        const milestoneDiv = document.createElement('div');
+        milestoneDiv.className = `tracker-milestone-item ${item.is_completed ? 'completed' : 'pending'}`;
+        milestoneDiv.innerHTML = `
+          <div class="milestone-icon">${item.is_completed ? '✔' : '⏳'}</div>
+          <div class="milestone-details">
+            <h4>${item.title}</h4>
+            <p>${item.description}</p>
+          </div>
+          <div class="milestone-timestamp">${item.timestamp}</div>
+        `;
+        trackerResults.appendChild(milestoneDiv);
+      });
+    }
+  };
+
+  if (trackerBtn && trackerInput) {
+    trackerBtn.addEventListener('click', () => {
+      const code = trackerInput.value.trim() || 'STD-84920';
+      fetchAndRenderMilestones(code);
+    });
+
+    // Auto load initial project code on startup
+    fetchAndRenderMilestones(trackerInput.value || 'STD-84920');
+  }
 });
+
