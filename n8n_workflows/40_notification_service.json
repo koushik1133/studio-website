@@ -1,0 +1,120 @@
+{
+  "name": "Agency OS - 40 Notification Abstraction Sub-workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "notification-service",
+        "options": {}
+      },
+      "name": "Standardized Notification Input",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.body.provider }}",
+        "rules": {
+          "rules": [
+            { "value2": "whatsapp", "output": 0 },
+            { "value2": "gmail", "output": 1 },
+            { "value2": "slack", "output": 2 }
+          ]
+        }
+      },
+      "name": "Provider Switch Node",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://localhost:8081/api/notifications/send",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\n  \"provider\": \"whatsapp_cloud_api\",\n  \"recipient\": \"{{ $json.body.recipient }}\",\n  \"body\": \"{{ $json.body.body }}\"\n}"
+      },
+      "name": "WhatsApp Cloud API Adapter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [700, 150]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://localhost:8081/api/notifications/send",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\n  \"provider\": \"gmail\",\n  \"recipient\": \"{{ $json.body.recipient }}\",\n  \"subject\": \"{{ $json.body.subject }}\",\n  \"body\": \"{{ $json.body.body }}\"\n}"
+      },
+      "name": "Gmail / Email Adapter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://localhost:8081/api/notifications/send",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\n  \"provider\": \"slack\",\n  \"recipient\": \"{{ $json.body.recipient }}\",\n  \"body\": \"{{ $json.body.body }}\"\n}"
+      },
+      "name": "Slack Webhook Adapter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [700, 450]
+    },
+    {
+      "parameters": {},
+      "name": "Error Trigger (Dead Letter Queue)",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [200, 600]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO public.failed_events (event_id, event_name, payload, error_message) VALUES ('{{ $json.execution.id }}', 'NOTIFICATION_FAILED', '{{ JSON.stringify($json) }}', 'Notification provider error');"
+      },
+      "name": "Log to Dead Letter Queue (DLQ)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [440, 600]
+    }
+  ],
+  "connections": {
+    "Standardized Notification Input": {
+      "main": [
+        [
+          {
+            "node": "Provider Switch Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Provider Switch Node": {
+      "main": [
+        [{ "node": "WhatsApp Cloud API Adapter", "type": "main", "index": 0 }],
+        [{ "node": "Gmail / Email Adapter", "type": "main", "index": 0 }],
+        [{ "node": "Slack Webhook Adapter", "type": "main", "index": 0 }]
+      ]
+    },
+    "Error Trigger (Dead Letter Queue)": {
+      "main": [
+        [
+          {
+            "node": "Log to Dead Letter Queue (DLQ)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

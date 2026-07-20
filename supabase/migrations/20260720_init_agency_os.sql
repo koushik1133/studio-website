@@ -1,5 +1,5 @@
 -- ============================================================================
--- AGENCY OPERATING SYSTEM (AGENCY OS) - REFINED POSTGRESQL MIGRATION
+-- AGENCY OPERATING SYSTEM (AGENCY OS) - FINAL PRODUCTION MIGRATION
 -- ============================================================================
 
 -- Enable required extensions
@@ -83,29 +83,54 @@ CREATE TABLE IF NOT EXISTS public.tasks (
 );
 
 -- ----------------------------------------------------------------------------
--- 5. SYSTEM EVENTS TABLE (n8n 00 Event Router Source)
+-- 5. THIN EVENT EMISSION TABLE (Next.js Emits -> n8n Reads)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.system_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  event_type VARCHAR(100) NOT NULL, -- e.g., 'PROJECT_CREATED', 'STAGE_STARTED', 'TASK_ASSIGNED'
-  entity_type VARCHAR(50) NOT NULL,  -- 'project', 'task', 'inquiry', 'meeting'
-  entity_id UUID,
+  event_id VARCHAR(255) UNIQUE NOT NULL,
+  event_name VARCHAR(100) NOT NULL,
+  project_id UUID REFERENCES public.projects(id) ON DELETE CASCADE,
+  triggered_by VARCHAR(100) DEFAULT 'system',
   payload JSONB NOT NULL DEFAULT '{}'::jsonb,
-  is_processed BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  timestamp TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ----------------------------------------------------------------------------
--- 6. NOTIFICATION QUEUE TABLE (Notification Service Abstraction)
+-- 6. IDEMPOTENCY LOG TABLE (Prevents Duplicate Automation Runs)
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.processed_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_id VARCHAR(255) UNIQUE NOT NULL,
+  event_name VARCHAR(100) NOT NULL,
+  workflow_version VARCHAR(50) DEFAULT 'v1.0.0',
+  processed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ----------------------------------------------------------------------------
+-- 7. DEAD LETTER QUEUE (DLQ - Stores Failed Automations for Inspection)
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.failed_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_id VARCHAR(255) NOT NULL,
+  event_name VARCHAR(100) NOT NULL,
+  payload JSONB NOT NULL,
+  error_message TEXT,
+  retry_count INT DEFAULT 3,
+  failed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ----------------------------------------------------------------------------
+-- 8. NOTIFICATION QUEUE TABLE (Multi-Provider Abstraction)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.notification_queue (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_id VARCHAR(255) REFERENCES public.system_events(event_id) ON DELETE SET NULL,
+  provider VARCHAR(50) NOT NULL CHECK (provider IN ('whatsapp', 'gmail', 'twilio', 'slack', 'discord', 'resend')),
   recipient VARCHAR(255) NOT NULL,
-  channel VARCHAR(50) DEFAULT 'whatsapp' CHECK (channel IN ('whatsapp', 'email', 'telegram', 'slack')),
-  message_type VARCHAR(50) NOT NULL, -- 'internal_dev', 'client_update', 'reminder'
+  subject VARCHAR(255),
   body TEXT NOT NULL,
-  provider VARCHAR(50) DEFAULT 'whatsapp_cloud_api',
-  status VARCHAR(50) DEFAULT 'queued' CHECK (status IN ('queued', 'sent', 'failed', 'retrying')),
+  priority VARCHAR(20) DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high', 'urgent')),
+  status VARCHAR(50) DEFAULT 'queued' CHECK (status IN ('queued', 'sent', 'failed')),
   retry_count INT DEFAULT 0,
   error_log TEXT,
   sent_at TIMESTAMPTZ,
@@ -113,12 +138,13 @@ CREATE TABLE IF NOT EXISTS public.notification_queue (
 );
 
 -- ----------------------------------------------------------------------------
--- INDEXES FOR PERFORMANCE
+-- INDEXES FOR HIGH PERFORMANCE
 -- ----------------------------------------------------------------------------
 CREATE INDEX IF NOT EXISTS idx_inquiries_type_status ON public.inquiries(type, status);
 CREATE INDEX IF NOT EXISTS idx_projects_code ON public.projects(project_code);
 CREATE INDEX IF NOT EXISTS idx_projects_stage ON public.projects(stage);
-CREATE INDEX IF NOT EXISTS idx_events_unprocessed ON public.system_events(is_processed, created_at);
+CREATE INDEX IF NOT EXISTS idx_system_events_id ON public.system_events(event_id);
+CREATE INDEX IF NOT EXISTS idx_processed_events_id ON public.processed_events(event_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_status ON public.notification_queue(status);
 
 -- ----------------------------------------------------------------------------
@@ -145,6 +171,8 @@ ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.project_milestones ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.system_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.processed_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.failed_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notification_queue ENABLE ROW LEVEL SECURITY;
 
 -- Anonymous public inserts for form submissions
@@ -159,4 +187,6 @@ CREATE POLICY "Service role full access on projects" ON public.projects FOR ALL 
 CREATE POLICY "Service role full access on milestones" ON public.project_milestones FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "Service role full access on tasks" ON public.tasks FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "Service role full access on system_events" ON public.system_events FOR ALL USING (auth.role() = 'service_role');
+CREATE POLICY "Service role full access on processed_events" ON public.processed_events FOR ALL USING (auth.role() = 'service_role');
+CREATE POLICY "Service role full access on failed_events" ON public.failed_events FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "Service role full access on notification_queue" ON public.notification_queue FOR ALL USING (auth.role() = 'service_role');

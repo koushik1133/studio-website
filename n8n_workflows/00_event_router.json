@@ -7,87 +7,109 @@
         "path": "event-router",
         "options": {}
       },
-      "name": "Incoming Event Webhook",
+      "name": "Thin Event Webhook Receiver",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [250, 300]
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT event_id FROM public.processed_events WHERE event_id = '{{ $json.body.eventId }}';"
+      },
+      "name": "Idempotency Check (processed_events)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [420, 300]
     },
     {
       "parameters": {
         "dataType": "string",
-        "value1": "={{ $json.body.event_type }}",
+        "value1": "={{ $json.body.event }}",
         "rules": {
           "rules": [
-            {
-              "value2": "PROJECT_CREATED",
-              "output": 0
-            },
-            {
-              "value2": "STAGE_STARTED",
-              "output": 1
-            },
-            {
-              "value2": "STAGE_COMPLETED",
-              "output": 1
-            },
-            {
-              "value2": "TASK_ASSIGNED",
-              "output": 2
-            },
-            {
-              "value2": "TIMELINE_UPDATED",
-              "output": 3
-            }
+            { "value2": "PROJECT_CREATED", "output": 0 },
+            { "value2": "PROJECT_UPDATED", "output": 1 },
+            { "value2": "STAGE_STARTED", "output": 1 },
+            { "value2": "STAGE_COMPLETED", "output": 1 },
+            { "value2": "TASK_CREATED", "output": 2 },
+            { "value2": "TASK_ASSIGNED", "output": 2 },
+            { "value2": "MEETING_CREATED", "output": 3 },
+            { "value2": "DEPLOYMENT_COMPLETED", "output": 4 }
           ]
         }
       },
       "name": "Event Type Switch Router",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 1,
-      "position": [480, 300]
+      "position": [640, 300]
     },
     {
       "parameters": {
         "requestMethod": "POST",
-        "url": "http://localhost:5678/webhook/01-provision-project",
+        "url": "http://localhost:5678/webhook/20-projects-provision",
         "jsonParameters": true,
         "options": {},
         "bodyParametersJson": "={{ JSON.stringify($json.body) }}"
       },
-      "name": "Route -> 01 Projects (Provisioning)",
+      "name": "Route -> 20 Projects (Provisioning)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
-      "position": [750, 150]
+      "position": [900, 150]
     },
     {
       "parameters": {
         "requestMethod": "POST",
-        "url": "http://localhost:5678/webhook/02-stage-transition",
+        "url": "http://localhost:5678/webhook/20-stage-update",
         "jsonParameters": true,
         "options": {},
         "bodyParametersJson": "={{ JSON.stringify($json.body) }}"
       },
-      "name": "Route -> 02 Stage & Timeline",
+      "name": "Route -> 20 Stage & Timeline Update",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
-      "position": [750, 300]
+      "position": [900, 300]
     },
     {
       "parameters": {
         "requestMethod": "POST",
-        "url": "http://localhost:5678/webhook/03-task-alert",
+        "url": "http://localhost:5678/webhook/30-task-assigned",
         "jsonParameters": true,
         "options": {},
         "bodyParametersJson": "={{ JSON.stringify($json.body) }}"
       },
-      "name": "Route -> 03 Task WhatsApp Alert",
+      "name": "Route -> 30 Tasks (Developer Alert)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
-      "position": [750, 450]
+      "position": [900, 450]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://localhost:5678/webhook/50-calendar-meeting",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{ JSON.stringify($json.body) }}"
+      },
+      "name": "Route -> 50 Meetings (Calendar Sync)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [900, 600]
     }
   ],
   "connections": {
-    "Incoming Event Webhook": {
+    "Thin Event Webhook Receiver": {
+      "main": [
+        [
+          {
+            "node": "Idempotency Check (processed_events)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotency Check (processed_events)": {
       "main": [
         [
           {
@@ -100,27 +122,10 @@
     },
     "Event Type Switch Router": {
       "main": [
-        [
-          {
-            "node": "Route -> 01 Projects (Provisioning)",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Route -> 02 Stage & Timeline",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Route -> 03 Task WhatsApp Alert",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Route -> 20 Projects (Provisioning)", "type": "main", "index": 0 }],
+        [{ "node": "Route -> 20 Stage & Timeline Update", "type": "main", "index": 0 }],
+        [{ "node": "Route -> 30 Tasks (Developer Alert)", "type": "main", "index": 0 }],
+        [{ "node": "Route -> 50 Meetings (Calendar Sync)", "type": "main", "index": 0 }]
       ]
     }
   }
