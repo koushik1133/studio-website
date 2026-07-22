@@ -323,6 +323,23 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `
+    },
+    portfolio: {
+      title: 'Dynamic Workspace Live Preview',
+      url: 'https://chandra-prakash-editor.vercel.app',
+      html: `
+        <div class="mock-preview-body" style="background:#09090b; color:#fafafa; height:100%; font-family:var(--font-sans);">
+          <div class="mock-navbar" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <span class="mock-nav-logo">WORKSPACE CANVAS</span>
+            <div class="mock-nav-links"><span>Editor</span><span>Preview</span><span>Timeline</span></div>
+          </div>
+          <div class="mock-hero" style="background: radial-gradient(circle at top, #18181b 0%, #09090b 100%);">
+            <h1 class="gradient-text" style="font-size:1.5rem; letter-spacing:-0.03em; margin:0 0 8px 0;">Interactive Developer Profile</h1>
+            <p style="color:#a1a1aa; font-size:0.8rem; margin:0 0 12px 0;">Dynamic markdown parser, scroll-driven timelines, and customized text editor blocks.</p>
+            <button class="btn btn-primary btn-small" style="margin-top:5px;">Launch Canvas</button>
+          </div>
+        </div>
+      `
     }
   };
 

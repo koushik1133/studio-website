@@ -45,10 +45,10 @@ VALUES
     '11111111-1111-1111-1111-111111111111',
     'student_major',
     'development',
-    'Koushik',
+    'Lead Dev',
     'high',
     CURRENT_DATE + INTERVAL '7 days',
-    'https://github.com/koushik1133/academic-verifier'
+    'https://github.com/studio-website/academic-verifier'
   ),
   (
     'a1b2c3d4-0000-0000-0000-000000000002',
@@ -57,10 +57,10 @@ VALUES
     '22222222-2222-2222-2222-222222222222',
     'commercial_saas',
     'ui_ux',
-    'Brother',
+    'Co-Founder',
     'urgent',
     CURRENT_DATE + INTERVAL '12 days',
-    'https://github.com/koushik1133/ofc-website'
+    'https://github.com/studio-website/ofc-website'
   )
 ON CONFLICT DO NOTHING;
 
@@ -87,8 +87,8 @@ ON CONFLICT DO NOTHING;
 -- Insert Kanban tasks
 INSERT INTO public.tasks (project_id, title, description, stage, assigned_to, due_date, is_urgent)
 VALUES
-  ('a1b2c3d4-0000-0000-0000-000000000001', 'Deploy IPFS Gateway', 'Set up Infura IPFS node connection script', 'in_progress', 'Koushik', NOW() + INTERVAL '1 day', TRUE),
-  ('a1b2c3d4-0000-0000-0000-000000000001', 'IEEE Draft Formatting', 'Format section 3 methodology according to IEEE 2026 template', 'todo', 'Koushik', NOW() + INTERVAL '3 days', FALSE),
-  ('a1b2c3d4-0000-0000-0000-000000000002', 'Menu UI Components', 'Build responsive menu items grid with category filter tabs', 'in_progress', 'Brother', NOW() + INTERVAL '2 days', TRUE),
-  ('a1b2c3d4-0000-0000-0000-000000000002', 'WhatsApp Webhook Connector', 'Set up n8n WhatsApp order confirmation trigger', 'backlog', 'Brother', NOW() + INTERVAL '5 days', FALSE)
+  ('a1b2c3d4-0000-0000-0000-000000000001', 'Deploy IPFS Gateway', 'Set up Infura IPFS node connection script', 'in_progress', 'Lead Dev', NOW() + INTERVAL '1 day', TRUE),
+  ('a1b2c3d4-0000-0000-0000-000000000001', 'IEEE Draft Formatting', 'Format section 3 methodology according to IEEE 2026 template', 'todo', 'Lead Dev', NOW() + INTERVAL '3 days', FALSE),
+  ('a1b2c3d4-0000-0000-0000-000000000002', 'Menu UI Components', 'Build responsive menu items grid with category filter tabs', 'in_progress', 'Co-Founder', NOW() + INTERVAL '2 days', TRUE),
+  ('a1b2c3d4-0000-0000-0000-000000000002', 'WhatsApp Webhook Connector', 'Set up n8n WhatsApp order confirmation trigger', 'backlog', 'Co-Founder', NOW() + INTERVAL '5 days', FALSE)
 ON CONFLICT DO NOTHING;
