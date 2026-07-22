@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agency OS - Administrative Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    :root {
+      --bg-dark-dashboard: #09090b;
+      --bg-card-dashboard: #18181b;
+      --border-dashboard: #27272a;
+    }
+    
+    body {
+      background: var(--bg-dark-dashboard);
+      color: #f4f4f5;
+      font-family: var(--font-sans), system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .dash-header {
+      border-bottom: 1px solid var(--border-dashboard);
+      padding: var(--space-4) 0;
+      background: var(--bg-dark-dashboard);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .dash-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+    
+    .dash-header-inner {
+      display: flex;
+      justify-content: flex-between;
+      align-items: center;
+    }
+    
+    .dash-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+    
+    .dash-main {
+      padding: var(--space-8) 0;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: var(--space-8);
+    }
+    
+    @media (max-width: 1024px) {
+      .dash-main {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .dash-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    
+    .dash-menu-item {
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      text-align: left;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+    
+    .dash-menu-item:hover, .dash-menu-item.active {
+      background: var(--bg-card-dashboard);
+      color: #fff;
+    }
+    
+    .dash-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+    
+    .dash-card {
+      background: var(--bg-card-dashboard);
+      border: 1px solid var(--border-dashboard);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+    
+    .dash-card-header {
+      display: flex;
+      justify-content: flex-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border-dashboard);
+      padding-bottom: var(--space-3);
+    }
+    
+    .dash-card-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    
+    .inquiry-table-wrapper {
+      overflow-x: auto;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    
+    th, td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--border-dashboard);
+    }
+    
+    th {
+      color: var(--text-dim);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    
+    .status-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .status-pill.student { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .status-pill.business { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .status-pill.pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    
+    .action-btn {
+      background: var(--bg-dark-dashboard);
+      border: 1px solid var(--border-dashboard);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .action-btn:hover {
+      border-color: #fff;
+    }
+    
+    .prompt-preview-box {
+      background: var(--bg-dark-dashboard);
+      border: 1px solid var(--border-dashboard);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+      color: #a1a1aa;
+      margin-top: var(--space-3);
+    }
+    
+    .project-row {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--border-dashboard);
+    }
+    
+    .project-row:last-child {
+      border-bottom: none;
+    }
+    
+    .project-meta {
+      display: flex;
+      justify-content: flex-between;
+      align-items: center;
+    }
+    
+    .project-title-wrapper h4 {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    
+    .project-code-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+    
+    .project-stage-select {
+      background: var(--bg-dark-dashboard);
+      border: 1px solid var(--border-dashboard);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    
+    .milestones-editor {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: var(--space-2);
+      padding-left: var(--space-4);
+    }
+    
+    .milestone-edit-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ADMIN HEADER -->
+  <header class="dash-header">
+    <div class="dash-container dash-header-inner">
+      <div class="dash-brand">
+        <span>⚡</span> AGENCY OS PORTAL
+      </div>
+      <div>
+        <a href="index.html" class="action-btn">Back to Website</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN DASHBOARD CONTENT -->
+  <div class="dash-container">
+    <div class="dash-main">
+      
+      <!-- SIDEBAR MENU -->
+      <aside class="dash-sidebar">
+        <button class="dash-menu-item active" id="menu-inquiries">
+          <i data-lucide="inbox"></i> Client Inquiries
+        </button>
+        <button class="dash-menu-item" id="menu-projects">
+          <i data-lucide="folder-git-2"></i> Active Projects
+        </button>
+        <button class="dash-menu-item" id="menu-prompts">
+          <i data-lucide="terminal"></i> Master Prompt Generator
+        </button>
+      </aside>
+      
+      <!-- PANELS CONTAINER -->
+      <div class="dash-panel">
+        
+        <!-- PANEL 1: CLIENT INQUIRIES -->
+        <section class="dash-card" id="panel-inquiries-view">
+          <div class="dash-card-header">
+            <h3>Incoming Client Intake Pipeline</h3>
+            <span class="status-pill student">Realtime Queue</span>
+          </div>
+          <div class="inquiry-table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Client / Org</th>
+                  <th>Inquiry Type</th>
+                  <th>Domain Req</th>
+                  <th>Timeline</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="inquiries-list-tbody">
+                <!-- JavaScript renders rows dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- PANEL 2: ACTIVE PROJECTS CONTROL -->
+        <section class="dash-card hidden" id="panel-projects-view">
+          <div class="dash-card-header">
+            <h3>Active Project Stage & Timeline Control</h3>
+            <span class="status-pill business">Supabase Sync</span>
+          </div>
+          <div id="projects-control-list">
+            <!-- JavaScript renders active project milestones -->
+          </div>
+        </section>
+
+        <!-- PANEL 3: MASTER PROMPT COMPILER -->
+        <section class="dash-card" id="panel-prompt-compiler">
+          <div class="dash-card-header">
+            <h3>AI Agent Master Prompt Compiler</h3>
+            <button class="action-btn" id="copy-prompt-btn">Copy Master Prompt</button>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0;">
+            Select an inquiry above and click "Generate Master Prompt" to compile instructions for your autonomous developer agent.
+          </p>
+          <div class="prompt-preview-box" id="master-prompt-output">
+            No prompt compiled. Select a client inquiry from the table to begin.
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+      
+      // Mocked local DB of inquiries (populated from client submissions)
+      const mockInquiries = [
+        {
+          id: '101',
+          type: 'student',
+          name: 'Rahul Varma',
+          organization: 'JNTU Hyderabad',
+          domain: 'Blockchain Certificate Verifier',
+          tech_stack: ['Solidity', 'IPFS', 'React.js'],
+          budget: 'Under 10,000 INR',
+          timeline: '4 Weeks',
+          details: 'An IEEE-compliant certificate authenticator using decentralized file storage and Sepolia smart contracts.'
+        },
+        {
+          id: '102',
+          type: 'business',
+          name: 'Anish Sharma',
+          organization: 'Trailer Parts Experts',
+          domain: 'Industrial Parts Catalog & E-Commerce',
+          tech_stack: ['React', 'FastAPI', 'PostgreSQL', 'TailwindCSS'],
+          budget: '150,000 INR',
+          timeline: '6 Weeks',
+          details: 'A parts catalog portal featuring search queries, inventory updates, and order request forms.'
+        },
+        {
+          id: '103',
+          type: 'student',
+          name: 'Priya K.',
+          organization: 'BITS Pilani',
+          domain: 'Brain Tumor Segmentation',
+          tech_stack: ['Python', 'PyTorch', 'Streamlit'],
+          budget: 'Under 15,000 INR',
+          timeline: '3 Weeks',
+          details: 'Image segmentation modeling using U-Net architecture with display heatmap reports.'
+        }
+      ];
+
+      // Mocked active projects milestones tracker
+      const activeProjects = [
+        {
+          project_code: 'STD-84920',
+          title: 'Decentralized Academic Verifier',
+          stage: 'development',
+          milestones: [
+            { id: 1, title: 'Requirements Received', is_completed: true },
+            { id: 2, title: 'Research Phase Completed', is_completed: true },
+            { id: 3, title: 'UI/UX Design Approved', is_completed: true },
+            { id: 4, title: 'Smart Contract Development', is_completed: false },
+            { id: 5, title: 'Testing & Verification', is_completed: false },
+            { id: 6, title: 'Final Deployment', is_completed: false }
+          ]
+        },
+        {
+          project_code: 'STD-92140',
+          title: 'Official Fried Chicken Website',
+          stage: 'ui_ux',
+          milestones: [
+            { id: 1, title: 'Discovery Meeting Completed', is_completed: true },
+            { id: 2, title: 'Research Started', is_completed: true },
+            { id: 3, title: 'UI Design Phase', is_completed: false },
+            { id: 4, title: 'Development Phase', is_completed: false },
+            { id: 5, title: 'Client Review', is_completed: false },
+            { id: 6, title: 'Production Deployment', is_completed: false }
+          ]
+        }
+      ];
+
+      // Render Inquiries Table
+      const tbody = document.getElementById('inquiries-list-tbody');
+      const renderInquiries = () => {
+        tbody.innerHTML = '';
+        mockInquiries.forEach(inq => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <strong>${inq.name}</strong>
+              <div style="font-size:0.75rem; color:var(--text-dim);">${inq.organization}</div>
+            </td>
+            <td><span class="status-pill ${inq.type}">${inq.type}</span></td>
+            <td><strong>${inq.domain}</strong></td>
+            <td>${inq.timeline}</td>
+            <td>
+              <button class="action-btn compile-prompt-trigger" data-id="${inq.id}">Compile AI Prompt</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      };
+      
+      renderInquiries();
+
+      // Handle Prompt Generation API Trigger
+      document.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('compile-prompt-trigger')) {
+          const id = e.target.getAttribute('data-id');
+          const inquiry = mockInquiries.find(i => i.id === id);
+          
+          if (!inquiry) return;
+          
+          const outputBox = document.getElementById('master-prompt-output');
+          outputBox.innerText = `[COMPILING] Translating inquiry requirements into Master Prompt specifications...`;
+          
+          try {
+            const response = await fetch('/api/prompt/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(inquiry)
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+              outputBox.innerText = data.master_prompt;
+            } else {
+              outputBox.innerText = `Failed to generate prompt: ${data.error}`;
+            }
+          } catch (err) {
+            outputBox.innerText = `Error contacting Prompt Compiler endpoint: ${err.message}`;
+          }
+        }
+      });
+
+      // Render Projects Control List
+      const projectsListContainer = document.getElementById('projects-control-list');
+      const renderProjects = () => {
+        projectsListContainer.innerHTML = '';
+        activeProjects.forEach(proj => {
+          const projRow = document.createElement('div');
+          projRow.className = 'project-row';
+          
+          const milestonesHTML = proj.milestones.map(ms => `
+            <label class="milestone-edit-item">
+              <input type="checkbox" class="milestone-toggle-check" data-proj="${proj.project_code}" data-ms="${ms.id}" ${ms.is_completed ? 'checked' : ''}>
+              <span>${ms.title}</span>
+            </label>
+          `).join('');
+
+          projRow.innerHTML = `
+            <div class="project-meta">
+              <div class="project-title-wrapper">
+                <h4>${proj.title} <span class="project-code-badge">[${proj.project_code}]</span></h4>
+              </div>
+              <div>
+                <select class="project-stage-select" data-proj="${proj.project_code}">
+                  <option value="discovery" ${proj.stage === 'discovery' ? 'selected' : ''}>Discovery</option>
+                  <option value="research" ${proj.stage === 'research' ? 'selected' : ''}>Research</option>
+                  <option value="ui_ux" ${proj.stage === 'ui_ux' ? 'selected' : ''}>UI/UX Design</option>
+                  <option value="development" ${proj.stage === 'development' ? 'selected' : ''}>Development</option>
+                  <option value="testing" ${proj.stage === 'testing' ? 'selected' : ''}>Testing</option>
+                  <option value="deployed" ${proj.stage === 'deployed' ? 'selected' : ''}>Deployed</option>
+                </select>
+              </div>
+            </div>
+            <div class="milestones-editor">
+              ${milestonesHTML}
+            </div>
+          `;
+          projectsListContainer.appendChild(projRow);
+        });
+      };
+      
+      renderProjects();
+
+      // Sidebar Tab Toggling
+      const menuInquiries = document.getElementById('menu-inquiries');
+      const menuProjects = document.getElementById('menu-projects');
+      const panelInquiries = document.getElementById('panel-inquiries-view');
+      const panelProjects = document.getElementById('panel-projects-view');
+      
+      menuInquiries.addEventListener('click', () => {
+        menuInquiries.classList.add('active');
+        menuProjects.classList.remove('active');
+        panelInquiries.classList.remove('hidden');
+        panelProjects.classList.add('hidden');
+      });
+      
+      menuProjects.addEventListener('click', () => {
+        menuProjects.classList.add('active');
+        menuInquiries.classList.remove('active');
+        panelProjects.classList.remove('hidden');
+        panelInquiries.classList.add('hidden');
+      });
+
+      // Copy Prompt Button Action
+      document.getElementById('copy-prompt-btn').addEventListener('click', () => {
+        const text = document.getElementById('master-prompt-output').innerText;
+        navigator.clipboard.writeText(text);
+        alert('Master Prompt copied to clipboard!');
+      });
+    });
+  </script>
+</body>
+</html>
