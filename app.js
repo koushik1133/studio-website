@@ -788,9 +788,10 @@ Select "Start Project on WhatsApp" to verify schedule!
           { title: 'Requirements Received', description: 'Student scoping intake form processed.', is_completed: true, timestamp: '2026-07-16 09:12 AM' },
           { title: 'Research Phase Completed', description: 'IEEE paper standards and IPFS node architecture finalized.', is_completed: true, timestamp: '2026-07-17 11:30 AM' },
           { title: 'UI/UX Design Approved', description: 'Dashboard wireframes and verified certificate templates approved.', is_completed: true, timestamp: '2026-07-18 04:05 PM' },
-          { title: 'Smart Contract Development', description: 'Compiling Solidity contracts on Ethereum Sepolia testnet.', is_completed: false, timestamp: 'Next Day' },
-          { title: 'Testing & Verification', description: 'Executing unit tests and generating IEEE report.', is_completed: false, timestamp: 'Pending' },
-          { title: 'Final Deployment & Code Handoff', description: 'Deploying live site and packaging zip deliverables.', is_completed: false, timestamp: 'Pending' }
+          { title: 'Development', description: 'Building frontend structure and smart contract verifiers.', is_completed: false, timestamp: 'In Progress' },
+          { title: 'Testing & Verification', description: 'Executing unit tests and verifying features.', is_completed: false, timestamp: 'Pending' },
+          { title: 'Client Review', description: 'Demos and feedback session with the client.', is_completed: false, timestamp: 'Pending' },
+          { title: 'Final Deployment', description: 'Deploying live site and packaging zip deliverables.', is_completed: false, timestamp: 'Pending' }
         ],
         'STD-92140': [
           { title: 'Discovery Meeting Completed', description: 'Initial scoping call & feature list finalized.', is_completed: true, timestamp: '2026-07-18 10:00 AM' },
