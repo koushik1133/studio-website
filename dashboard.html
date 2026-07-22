@@ -3,330 +3,588 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agency OS - Administrative Dashboard</title>
+  <title>Agency OS - Admin Command Center</title>
   <link rel="stylesheet" href="styles.css">
   
   <style>
     :root {
-      --bg-dark-dashboard: #09090b;
-      --bg-card-dashboard: #18181b;
-      --border-dashboard: #27272a;
+      --bg-dash: #050507;
+      --bg-card: #0c0c0e;
+      --bg-card-hover: #121215;
+      --border-dash: rgba(255, 255, 255, 0.06);
+      --border-focus: rgba(255, 255, 255, 0.15);
+      --accent-green: #10b981;
+      --accent-blue: #3b82f6;
+      --font-dash: var(--font-sans), system-ui, -apple-system, sans-serif;
     }
     
     body {
-      background: var(--bg-dark-dashboard);
-      color: #f4f4f5;
-      font-family: var(--font-sans), system-ui, sans-serif;
+      background-color: var(--bg-dash);
+      color: #fafafa;
+      font-family: var(--font-dash);
       margin: 0;
       padding: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
     
-    .dash-header {
-      border-bottom: 1px solid var(--border-dashboard);
-      padding: var(--space-4) 0;
-      background: var(--bg-dark-dashboard);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    
-    .dash-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 var(--space-6);
-    }
-    
-    .dash-header-inner {
-      display: flex;
-      justify-content: flex-between;
-      align-items: center;
-    }
-    
-    .dash-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      letter-spacing: -0.02em;
-    }
-    
-    .dash-main {
-      padding: var(--space-8) 0;
+    /* Layout Wrapper */
+    .dash-wrapper {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: var(--space-8);
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
     }
     
     @media (max-width: 1024px) {
-      .dash-main {
+      .dash-wrapper {
         grid-template-columns: 1fr;
       }
     }
     
+    /* Sidebar styling */
     .dash-sidebar {
+      background: #09090b;
+      border-right: 1px solid var(--border-dash);
+      padding: var(--space-6) var(--space-4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+    
+    @media (max-width: 1024px) {
+      .dash-sidebar {
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border-dash);
+      }
+    }
+    
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+    
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    
+    .sidebar-brand span {
+      background: #fff;
+      color: #000;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    
+    .sidebar-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .sidebar-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: var(--space-3) var(--space-4);
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .sidebar-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    .sidebar-btn.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border-dash);
+    }
+    
+    .sidebar-footer {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    
+    /* Main Content Area */
+    .dash-main {
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      max-width: 1500px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    /* Top Stats row */
+    .dash-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-4);
+    }
+    
+    .stat-mini-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dash);
+      border-radius: var(--radius-md);
+      padding: var(--space-4) var(--space-5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .stat-mini-info h5 {
+      margin: 0 0 4px 0;
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .stat-mini-info p {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    .stat-mini-icon {
+      color: var(--text-dim);
+      opacity: 0.4;
+    }
+    
+    /* Pulse Green dot */
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    
+    /* 2-Column Work Area Grid */
+    .dash-grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: var(--space-6);
+      align-items: start;
+    }
+    
+    @media (max-width: 1200px) {
+      .dash-grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Section Cards */
+    .dashboard-panel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dash);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      transition: border-color 0.2s;
+    }
+    
+    .dashboard-panel-card:hover {
+      border-color: var(--border-focus);
+    }
+    
+    .panel-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-dash);
+      padding-bottom: var(--space-4);
+    }
+    
+    .panel-card-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    
+    /* Modern list of inquiries */
+    .inquiries-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .inquiry-item-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-dash);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: var(--space-4);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .inquiry-item-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-focus);
+      transform: translateY(-2px);
+    }
+    
+    .inquiry-item-card.active {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .inq-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .inq-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .inq-client {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+    
+    .inq-org {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    
+    .inq-domain {
+      font-weight: 500;
+      font-size: 0.88rem;
+      margin: var(--space-1) 0 0 0;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    
+    .inq-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin: 4px 0 0 0;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* Modern Badges */
+    .badge-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    
+    .badge-pill.student { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+    .badge-pill.business { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
+    
+    /* Dynamic active projects list */
+    .projects-stack {
       display: flex;
       flex-direction: column;
       gap: var(--space-4);
     }
     
-    .dash-menu-item {
-      padding: var(--space-3) var(--space-4);
-      border-radius: var(--radius-md);
-      background: transparent;
-      border: none;
-      color: var(--text-dim);
-      text-align: left;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .dash-menu-item:hover, .dash-menu-item.active {
-      background: var(--bg-card-dashboard);
-      color: #fff;
-    }
-    
-    .dash-panel {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-6);
-    }
-    
-    .dash-card {
-      background: var(--bg-card-dashboard);
-      border: 1px solid var(--border-dashboard);
-      border-radius: var(--radius-lg);
-      padding: var(--space-6);
-    }
-    
-    .dash-card-header {
-      display: flex;
-      justify-content: flex-between;
-      align-items: center;
-      margin-bottom: var(--space-4);
-      border-bottom: 1px solid var(--border-dashboard);
-      padding-bottom: var(--space-3);
-    }
-    
-    .dash-card-header h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-    
-    .inquiry-table-wrapper {
-      overflow-x: auto;
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.9rem;
-    }
-    
-    th, td {
-      padding: var(--space-3) var(--space-4);
-      border-bottom: 1px solid var(--border-dashboard);
-    }
-    
-    th {
-      color: var(--text-dim);
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.05em;
-    }
-    
-    .status-pill {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    
-    .status-pill.student { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-    .status-pill.business { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-    .status-pill.pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-    
-    .action-btn {
-      background: var(--bg-dark-dashboard);
-      border: 1px solid var(--border-dashboard);
-      color: #fff;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-    
-    .action-btn:hover {
-      border-color: #fff;
-    }
-    
-    .prompt-preview-box {
-      background: var(--bg-dark-dashboard);
-      border: 1px solid var(--border-dashboard);
+    .project-card-item {
+      border: 1px solid var(--border-dash);
       border-radius: var(--radius-md);
       padding: var(--space-4);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      max-height: 400px;
-      overflow-y: auto;
-      color: #a1a1aa;
-      margin-top: var(--space-3);
+      background: rgba(255, 255, 255, 0.01);
     }
     
-    .project-row {
+    .project-header-row {
       display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      padding: var(--space-4) 0;
-      border-bottom: 1px solid var(--border-dashboard);
-    }
-    
-    .project-row:last-child {
-      border-bottom: none;
-    }
-    
-    .project-meta {
-      display: flex;
-      justify-content: flex-between;
+      justify-content: space-between;
       align-items: center;
+      margin-bottom: var(--space-3);
     }
     
-    .project-title-wrapper h4 {
+    .project-header-row h4 {
       margin: 0;
       font-size: 0.95rem;
-      font-weight: 600;
-    }
-    
-    .project-code-badge {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-dim);
-    }
-    
-    .project-stage-select {
-      background: var(--bg-dark-dashboard);
-      border: 1px solid var(--border-dashboard);
+      font-weight: 700;
       color: #fff;
-      padding: 4px 8px;
+    }
+    
+    .stage-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-dash);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 3px 6px;
       border-radius: 4px;
-      font-size: 0.8rem;
+      cursor: pointer;
     }
     
-    .milestones-editor {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: var(--space-2);
-      padding-left: var(--space-4);
+    .project-milestones-checklist {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px dashed var(--border-dash);
     }
     
-    .milestone-edit-item {
+    .checkbox-container {
       display: flex;
       align-items: center;
       gap: 8px;
       font-size: 0.8rem;
       color: var(--text-dim);
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .checkbox-container input {
+      accent-color: #fff;
+      cursor: pointer;
+    }
+    
+    /* Terminal Prompt Box */
+    .terminal-console-card {
+      background: #030304;
+      border: 1px solid var(--border-dash);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: var(--space-6);
+    }
+    
+    .terminal-header {
+      background: #0d0d0f;
+      padding: 12px var(--space-4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-dash);
+    }
+    
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+    
+    .window-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+    
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+    
+    .terminal-body {
+      padding: var(--space-5);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.8);
+      height: 480px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      background: #030304;
+    }
+    
+    /* Custom scrollbar for terminal */
+    .terminal-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .terminal-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .terminal-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+    
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 <body>
 
-  <!-- ADMIN HEADER -->
-  <header class="dash-header">
-    <div class="dash-container dash-header-inner">
-      <div class="dash-brand">
-        <span>⚡</span> AGENCY OS PORTAL
-      </div>
-      <div>
-        <a href="index.html" class="action-btn">Back to Website</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN DASHBOARD CONTENT -->
-  <div class="dash-container">
-    <div class="dash-main">
-      
-      <!-- SIDEBAR MENU -->
-      <aside class="dash-sidebar">
-        <button class="dash-menu-item active" id="menu-inquiries">
-          <i data-lucide="inbox"></i> Client Inquiries
-        </button>
-        <button class="dash-menu-item" id="menu-projects">
-          <i data-lucide="folder-git-2"></i> Active Projects
-        </button>
-        <button class="dash-menu-item" id="menu-prompts">
-          <i data-lucide="terminal"></i> Master Prompt Generator
-        </button>
-      </aside>
-      
-      <!-- PANELS CONTAINER -->
-      <div class="dash-panel">
+  <div class="dash-wrapper">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-brand">
+          <span>⚡</span> AGENCY OS v2.0
+        </div>
         
-        <!-- PANEL 1: CLIENT INQUIRIES -->
-        <section class="dash-card" id="panel-inquiries-view">
-          <div class="dash-card-header">
-            <h3>Incoming Client Intake Pipeline</h3>
-            <span class="status-pill student">Realtime Queue</span>
-          </div>
-          <div class="inquiry-table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Client / Org</th>
-                  <th>Inquiry Type</th>
-                  <th>Domain Req</th>
-                  <th>Timeline</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="inquiries-list-tbody">
-                <!-- JavaScript renders rows dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- PANEL 2: ACTIVE PROJECTS CONTROL -->
-        <section class="dash-card hidden" id="panel-projects-view">
-          <div class="dash-card-header">
-            <h3>Active Project Stage & Timeline Control</h3>
-            <span class="status-pill business">Supabase Sync</span>
-          </div>
-          <div id="projects-control-list">
-            <!-- JavaScript renders active project milestones -->
-          </div>
-        </section>
-
-        <!-- PANEL 3: MASTER PROMPT COMPILER -->
-        <section class="dash-card" id="panel-prompt-compiler">
-          <div class="dash-card-header">
-            <h3>AI Agent Master Prompt Compiler</h3>
-            <button class="action-btn" id="copy-prompt-btn">Copy Master Prompt</button>
-          </div>
-          <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0;">
-            Select an inquiry above and click "Generate Master Prompt" to compile instructions for your autonomous developer agent.
-          </p>
-          <div class="prompt-preview-box" id="master-prompt-output">
-            No prompt compiled. Select a client inquiry from the table to begin.
-          </div>
-        </section>
-
+        <nav class="sidebar-menu">
+          <button class="sidebar-btn active" id="menu-inquiries">
+            <i data-lucide="inbox" style="width:16px;height:16px;"></i> Client Inquiries
+          </button>
+          <button class="sidebar-btn" id="menu-projects">
+            <i data-lucide="kanban" style="width:16px;height:16px;"></i> Project Milestones
+          </button>
+        </nav>
       </div>
-    </div>
+      
+      <div class="sidebar-footer">
+        <a href="index.html" class="btn btn-secondary btn-small" style="width: 100%; justify-content: center; border-color:var(--border-dash);">
+          <i data-lucide="arrow-left" style="width:14px; height:14px; margin-right:6px;"></i> Exit Dashboard
+        </a>
+      </div>
+    </aside>
+    
+    <!-- MAIN WORKSPACE -->
+    <main class="dash-main">
+      
+      <!-- MINI STATUS CARDS -->
+      <section class="dash-stats-grid">
+        <div class="stat-mini-card">
+          <div class="stat-mini-info">
+            <h5>Realtime Queue</h5>
+            <p>3 Pending</p>
+          </div>
+          <i data-lucide="inbox" class="stat-mini-icon"></i>
+        </div>
+        <div class="stat-mini-card">
+          <div class="stat-mini-info">
+            <h5>Active Sprints</h5>
+            <p>2 Running</p>
+          </div>
+          <i data-lucide="refresh-cw" class="stat-mini-icon"></i>
+        </div>
+        <div class="stat-mini-card">
+          <div class="stat-mini-info">
+            <h5>System API</h5>
+            <p style="color:var(--accent-green); display:flex; align-items:center; gap:8px;">
+              Operational <span class="pulse-dot"></span>
+            </p>
+          </div>
+          <i data-lucide="activity" class="stat-mini-icon"></i>
+        </div>
+      </section>
+      
+      <!-- GRID WORKSPACE -->
+      <div class="dash-grid-layout">
+        
+        <!-- LEFT PANELS stack -->
+        <div style="display:flex; flex-direction:column; gap: var(--space-6);">
+          
+          <!-- PANEL A: CLIENT INQUIRIES -->
+          <section class="dashboard-panel-card" id="panel-inquiries-view">
+            <div class="panel-card-header">
+              <div>
+                <h3 style="margin:0 0 4px 0;">Client Intake Pipeline</h3>
+                <p style="font-size:0.8rem; color:var(--text-dim); margin:0;">Select a card below to compile its autonomous development prompt specifications.</p>
+              </div>
+            </div>
+            
+            <div class="inquiries-stack" id="inquiries-stack-container">
+              <!-- Rendered dynamically by JavaScript -->
+            </div>
+          </section>
+          
+          <!-- PANEL B: PROJECT MILESTONES -->
+          <section class="dashboard-panel-card hidden" id="panel-projects-view">
+            <div class="panel-card-header">
+              <div>
+                <h3 style="margin:0 0 4px 0;">Live Project Tracking & Stages</h3>
+                <p style="font-size:0.8rem; color:var(--text-dim); margin:0;">Toggle client-visible milestones to update the front-end timeline instantly.</p>
+              </div>
+            </div>
+            
+            <div class="projects-stack" id="projects-stack-container">
+              <!-- Rendered dynamically by JavaScript -->
+            </div>
+          </section>
+          
+        </div>
+        
+        <!-- RIGHT PANEL: TERMINAL PROMPT OUTPUT -->
+        <aside class="terminal-console-card">
+          <div class="terminal-header">
+            <div class="window-dots">
+              <span class="dot-red"></span>
+              <span class="dot-yellow"></span>
+              <span class="dot-green"></span>
+            </div>
+            <div class="terminal-title">PROMPT_COMPILER.SH</div>
+            <button class="action-btn" id="copy-prompt-btn" style="padding: 2px 8px; font-size:0.7rem; border-radius:4px; font-family:var(--font-dash);">
+              <i data-lucide="copy" style="width:10px; height:10px; vertical-align:middle; margin-right:4px;"></i> Copy Prompt
+            </button>
+          </div>
+          
+          <div class="terminal-body" id="master-prompt-output">================================================================================
+AGY PORTAL COMPILER MODULE STANDBY
+================================================================================
+
+[IDLE] Select any client card on the left panel to compile a Master Prompt.
+The prompt specifies the development parameters, quality safeguards, database 
+relations, and unit tests tailored to the selected domain.</div>
+        </aside>
+        
+      </div>
+      
+    </main>
+    
   </div>
 
   <!-- Lucide Icons -->
@@ -403,55 +661,50 @@
         }
       ];
 
-      // Render Inquiries Table
-      const tbody = document.getElementById('inquiries-list-tbody');
+      // Render Inquiries Table as Modern Cards
+      const inqContainer = document.getElementById('inquiries-stack-container');
       const renderInquiries = () => {
-        tbody.innerHTML = '';
+        inqContainer.innerHTML = '';
         mockInquiries.forEach(inq => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>
-              <strong>${inq.name}</strong>
-              <div style="font-size:0.75rem; color:var(--text-dim);">${inq.organization}</div>
-            </td>
-            <td><span class="status-pill ${inq.type}">${inq.type}</span></td>
-            <td><strong>${inq.domain}</strong></td>
-            <td>${inq.timeline}</td>
-            <td>
-              <button class="action-btn compile-prompt-trigger" data-id="${inq.id}">Compile AI Prompt</button>
-            </td>
+          const card = document.createElement('div');
+          card.className = 'inquiry-item-card';
+          card.setAttribute('data-id', inq.id);
+          card.innerHTML = `
+            <div class="inq-meta">
+              <div class="inq-top">
+                <span class="badge-pill ${inq.type}">${inq.type}</span>
+                <span class="inq-org" style="font-family:var(--font-mono); font-size:0.75rem;">ID: ${inq.id}</span>
+              </div>
+              <div class="inq-client">${inq.name} <span class="inq-org">at ${inq.organization}</span></div>
+              <h4 class="inq-domain">${inq.domain}</h4>
+              <p class="inq-desc">${inq.details}</p>
+            </div>
+            <div>
+              <button class="action-btn" style="border-radius:6px; font-size:0.75rem;">Compile</button>
+            </div>
           `;
-          tbody.appendChild(tr);
+          inqContainer.appendChild(card);
         });
       };
       
       renderInquiries();
-      // Handle Prompt Generation API Trigger
-      document.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('compile-prompt-trigger')) {
-          const id = e.target.getAttribute('data-id');
-          const inquiry = mockInquiries.find(i => i.id === id);
-          
-          if (!inquiry) return;
-          
-          const outputBox = document.getElementById('master-prompt-output');
-          outputBox.innerText = `[COMPILING] Translating inquiry requirements into Master Prompt specifications...`;
 
-          const compileLocalPrompt = (inq) => {
-            let strategy = '';
-            let qa = '';
-            const domainLower = inq.domain.toLowerCase();
-            if (domainLower.includes('ecommerce') || domainLower.includes('parts') || domainLower.includes('shop')) {
-              strategy = `### DOMAIN ARCHITECTURE: HIGH-VOLUME E-COMMERCE & CATALOG\n1. Setup database structures supporting orders & inventory.\n2. Configure bulk price structures.\n3. Integrate Stripe webhook endpoints.`;
-              qa = `### QA PROTOCOL:\n- Verify catalog speed.\n- Mock Stripe webhook checkout actions.`;
-            } else if (domainLower.includes('portfolio') || domainLower.includes('editor') || domainLower.includes('workspace')) {
-              strategy = `### DOMAIN ARCHITECTURE: HIGH-INTERACTIVE CANVAS & WORKSPACE\n1. Build customized canvas layouts.\n2. Optimize CSS transitions for performance.\n3. Set up sanitizers for markdown.`;
-              qa = `### QA PROTOCOL:\n- Audit keyboard layout controls.\n- Profile frame rendering rates (> 58 FPS).`;
-            } else {
-              strategy = `### DOMAIN ARCHITECTURE: SAAS OR CUSTOM WEB APPLICATION\n1. Setup JWT authentication.\n2. Define Supabase RLS security policies.`;
-              qa = `### QA PROTOCOL:\n- Check auth token expiration limits.\n- Write unit tests for API controllers.`;
-            }
-            return `================================================================================
+      // Client Side Prompt Compiler Fallback
+      const compileLocalPrompt = (inq) => {
+        let strategy = '';
+        let qa = '';
+        const domainLower = inq.domain.toLowerCase();
+        if (domainLower.includes('ecommerce') || domainLower.includes('parts') || domainLower.includes('shop')) {
+          strategy = `### DOMAIN ARCHITECTURE: HIGH-VOLUME E-COMMERCE & CATALOG\n1. Setup database structures supporting orders & inventory.\n2. Configure bulk price structures.\n3. Integrate Stripe webhook endpoints.`;
+          qa = `### QA PROTOCOL:\n- Verify catalog speed.\n- Mock Stripe webhook checkout actions.`;
+        } else if (domainLower.includes('portfolio') || domainLower.includes('editor') || domainLower.includes('workspace')) {
+          strategy = `### DOMAIN ARCHITECTURE: HIGH-INTERACTIVE CANVAS & WORKSPACE\n1. Build customized canvas layouts.\n2. Optimize CSS transitions for performance.\n3. Set up sanitizers for markdown.`;
+          qa = `### QA PROTOCOL:\n- Audit keyboard layout controls.\n- Profile frame rendering rates (> 58 FPS).`;
+        } else {
+          strategy = `### DOMAIN ARCHITECTURE: SAAS OR CUSTOM WEB APPLICATION\n1. Setup JWT authentication.\n2. Define Supabase RLS security policies.`;
+          qa = `### QA PROTOCOL:\n- Check auth token expiration limits.\n- Write unit tests for API controllers.`;
+        }
+        return `================================================================================
 AGENT SPECIFICATION: AUTONOMOUS DEVELOPMENT & TESTING PROTOCOL
 PROJECT CODE REFERENCE: STD-${inq.id}
 ORGANIZATION: ${inq.organization}
@@ -481,90 +734,102 @@ ${qa}
 ================================================================================
 PROCEED WITH SPRINT INITIATION: INITIALIZE CODEBASE STACK NOW.
 ================================================================================`.trim();
-          };
+      };
 
-          try {
-            const response = await fetch('/api/prompt/generate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(inquiry)
-            });
-            
-            if (response.ok) {
-              const data = await response.json();
-              if (data.success) {
-                outputBox.innerText = data.master_prompt;
-              } else {
-                outputBox.innerText = compileLocalPrompt(inquiry);
-              }
+      // Handle Prompt Generation API Trigger
+      inqContainer.addEventListener('click', async (e) => {
+        const itemCard = e.target.closest('.inquiry-item-card');
+        if (!itemCard) return;
+
+        // Toggle active design styles
+        document.querySelectorAll('.inquiry-item-card').forEach(c => c.classList.remove('active'));
+        itemCard.classList.add('active');
+
+        const id = itemCard.getAttribute('data-id');
+        const inquiry = mockInquiries.find(i => i.id === id);
+        
+        if (!inquiry) return;
+        
+        const outputBox = document.getElementById('master-prompt-output');
+        outputBox.innerText = `[COMPILING] Translating inquiry requirements into Master Prompt specifications...`;
+        
+        try {
+          const response = await fetch('/api/prompt/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(inquiry)
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success) {
+              outputBox.innerText = data.master_prompt;
             } else {
               outputBox.innerText = compileLocalPrompt(inquiry);
             }
-          } catch (err) {
+          } else {
             outputBox.innerText = compileLocalPrompt(inquiry);
           }
+        } catch (err) {
+          outputBox.innerText = compileLocalPrompt(inquiry);
         }
       });
 
       // Render Projects Control List
-      const projectsListContainer = document.getElementById('projects-control-list');
+      const projContainer = document.getElementById('projects-stack-container');
       const renderProjects = () => {
-        projectsListContainer.innerHTML = '';
+        projContainer.innerHTML = '';
         activeProjects.forEach(proj => {
-          const projRow = document.createElement('div');
-          projRow.className = 'project-row';
+          const card = document.createElement('div');
+          card.className = 'project-card-item';
           
           const milestonesHTML = proj.milestones.map(ms => `
-            <label class="milestone-edit-item">
-              <input type="checkbox" class="milestone-toggle-check" data-proj="${proj.project_code}" data-ms="${ms.id}" ${ms.is_completed ? 'checked' : ''}>
+            <label class="checkbox-container">
+              <input type="checkbox" data-proj="${proj.project_code}" data-ms="${ms.id}" ${ms.is_completed ? 'checked' : ''}>
               <span>${ms.title}</span>
             </label>
           `).join('');
 
-          projRow.innerHTML = `
-            <div class="project-meta">
-              <div class="project-title-wrapper">
-                <h4>${proj.title} <span class="project-code-badge">[${proj.project_code}]</span></h4>
-              </div>
-              <div>
-                <select class="project-stage-select" data-proj="${proj.project_code}">
-                  <option value="discovery" ${proj.stage === 'discovery' ? 'selected' : ''}>Discovery</option>
-                  <option value="research" ${proj.stage === 'research' ? 'selected' : ''}>Research</option>
-                  <option value="ui_ux" ${proj.stage === 'ui_ux' ? 'selected' : ''}>UI/UX Design</option>
-                  <option value="development" ${proj.stage === 'development' ? 'selected' : ''}>Development</option>
-                  <option value="testing" ${proj.stage === 'testing' ? 'selected' : ''}>Testing</option>
-                  <option value="deployed" ${proj.stage === 'deployed' ? 'selected' : ''}>Deployed</option>
-                </select>
-              </div>
+          card.innerHTML = `
+            <div class="project-header-row">
+              <h4>${proj.title} <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">[${proj.project_code}]</span></h4>
+              <select class="stage-pill">
+                <option value="discovery" ${proj.stage === 'discovery' ? 'selected' : ''}>Discovery</option>
+                <option value="research" ${proj.stage === 'research' ? 'selected' : ''}>Research</option>
+                <option value="ui_ux" ${proj.stage === 'ui_ux' ? 'selected' : ''}>UI/UX Design</option>
+                <option value="development" ${proj.stage === 'development' ? 'selected' : ''}>Development</option>
+                <option value="testing" ${proj.stage === 'testing' ? 'selected' : ''}>Testing</option>
+                <option value="deployed" ${proj.stage === 'deployed' ? 'selected' : ''}>Deployed</option>
+              </select>
             </div>
-            <div class="milestones-editor">
+            <div class="project-milestones-checklist">
               ${milestonesHTML}
             </div>
           `;
-          projectsListContainer.appendChild(projRow);
+          projContainer.appendChild(card);
         });
       };
       
       renderProjects();
 
-      // Sidebar Tab Toggling
-      const menuInquiries = document.getElementById('menu-inquiries');
-      const menuProjects = document.getElementById('menu-projects');
-      const panelInquiries = document.getElementById('panel-inquiries-view');
-      const panelProjects = document.getElementById('panel-projects-view');
+      // Sidebar Navigation Triggers
+      const btnInq = document.getElementById('menu-inquiries');
+      const btnProj = document.getElementById('menu-projects');
+      const panelInq = document.getElementById('panel-inquiries-view');
+      const panelProj = document.getElementById('panel-projects-view');
       
-      menuInquiries.addEventListener('click', () => {
-        menuInquiries.classList.add('active');
-        menuProjects.classList.remove('active');
-        panelInquiries.classList.remove('hidden');
-        panelProjects.classList.add('hidden');
+      btnInq.addEventListener('click', () => {
+        btnInq.classList.add('active');
+        btnProj.classList.remove('active');
+        panelInq.classList.remove('hidden');
+        panelProj.classList.add('hidden');
       });
       
-      menuProjects.addEventListener('click', () => {
-        menuProjects.classList.add('active');
-        menuInquiries.classList.remove('active');
-        panelProjects.classList.remove('hidden');
-        panelInquiries.classList.add('hidden');
+      btnProj.addEventListener('click', () => {
+        btnProj.classList.add('active');
+        btnInq.classList.remove('active');
+        panelProj.classList.remove('hidden');
+        panelInq.classList.add('hidden');
       });
 
       // Copy Prompt Button Action
