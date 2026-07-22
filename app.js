@@ -281,12 +281,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const templatePreviews = {
     gym: {
-      title: 'Velocity Fit Live Preview',
-      url: 'https://velocityfit.template.studiowebsite.in',
+      title: 'RanFitness Live Preview',
+      url: 'https://ranfitness.template.studiowebsite.in',
       html: `
         <div class="mock-preview-body" style="background:#0b0c10; color:#fff; height:100%;">
           <div class="mock-navbar">
-            <span class="mock-nav-logo">VELOCITY FIT</span>
+            <span class="mock-nav-logo">RANFITNESS</span>
             <div class="mock-nav-links"><span>Classes</span><span>Trainers</span><span>Book</span></div>
           </div>
           <div class="mock-hero" style="background: radial-gradient(circle, #1a1c23 0%, #0b0c10 100%);">
