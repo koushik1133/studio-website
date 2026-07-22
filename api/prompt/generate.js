@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { id, type, name, organization, domain, tech_stack = [], budget, timeline, details } = req.body;
+    const { id, type, name, organization, domain, tech_stack = [], budget, timeline, details, design_preferences } = req.body;
 
     if (!domain || !details) {
       return res.status(400).json({ error: 'Missing required parameters: domain, details' });
@@ -94,8 +94,8 @@ You are an expert autonomous software engineer. Your task is to develop, test, a
 ### TARGET TECH STACK:
 ${cleanStack || 'React, Next.js, Supabase, TailwindCSS, n8n'}
 
-### FINANCIAL BUDGET SCOPE:
-${budget || 'Custom Scoped'}
+### CLIENT DESIGN PREFERENCES & SCOPE:
+${design_preferences || budget || 'None specified'}
 
 --------------------------------------------------------------------------------
 1. ARCHITECTURAL PROTOCOL

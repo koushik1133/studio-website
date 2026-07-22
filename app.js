@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const domain = document.getElementById('stu-domain').value;
       const deadline = document.getElementById('stu-deadline').value;
       const idea = document.getElementById('stu-idea').value;
-      const budget = document.getElementById('stu-budget').value;
+      const preferences = document.getElementById('stu-preferences').value || 'None specified';
       const whatsapp = document.getElementById('stu-whatsapp').value;
 
       // Reset Modal styling & actions
@@ -611,10 +611,10 @@ DOMAIN: ${domain} | BRANCH: ${branch} (Year ${year})
 * Module C (Week 5): Full layout synchronization & dashboard testing.
 * Module D (Week 6): Formatting standard IEEE report & viva slides assembly.
 
-3. FINANCIAL CONFIGURATION (STUDENT DISCOUNT APPLIED)
+3. PREFERENCES & CONFIGURATION (STUDENT DISCOUNT APPLIED)
 -----------------------------------------------------
 - Scope Type: Academic ${type} Project (fully configured)
-- Stated Budget: INR ${budget}
+- Design Preferences: ${preferences}
 - Core Deliverables: Code + Documentation + Viva Video guides
 
 =====================================================
@@ -642,7 +642,7 @@ Select "Start Project on WhatsApp" to verify schedule!
           `*College:* ${college}\n` +
           `*Domain:* ${domain}\n` +
           `*Title Idea:* ${proposedTitle}\n` +
-          `*Proposed Budget:* ${budget}\n\n` +
+          `*Design Preferences:* ${preferences}\n\n` +
           `Please confirm timeline & initial scoping draft!`
         );
         whatsappBlueprintLink.href = `https://wa.me/919999999999?text=${encodedMsg}`;
