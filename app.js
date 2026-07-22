@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     portfolio: {
       title: 'Dynamic Workspace Live Preview',
-      url: 'https://chandra-prakash-editor.vercel.app',
+      url: 'https://workspacecanvas.template.studiowebsite.in',
       html: `
         <div class="mock-preview-body" style="background:#09090b; color:#fafafa; height:100%; font-family:var(--font-sans);">
           <div class="mock-navbar" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
