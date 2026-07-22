@@ -389,7 +389,8 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1240px;
+  max-width: 1440px;
+  width: 95%;
   height: 100%;
   margin: 0 auto;
   padding: 0 var(--space-4);
@@ -416,11 +417,12 @@ p {
 .main-nav ul {
   display: flex;
   list-style: none;
-  gap: var(--space-2);
+  gap: 12px;
+  align-items: center;
 }
 
 .main-nav a {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 500;
   color: var(--text-dim);
   white-space: nowrap;
@@ -432,7 +434,7 @@ p {
 
 .student-link {
   border: 1px solid var(--border-color);
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-sm);
   background-color: var(--selection-bg);
 }
