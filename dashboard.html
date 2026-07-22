@@ -635,6 +635,7 @@ relations, and unit tests tailored to the selected domain.</div>
       const activeProjects = [
         {
           project_code: 'STD-84920',
+          inquiry_id: '101',
           title: 'Decentralized Academic Verifier',
           stage: 'development',
           milestones: [
@@ -648,7 +649,8 @@ relations, and unit tests tailored to the selected domain.</div>
         },
         {
           project_code: 'STD-92140',
-          title: 'Official Fried Chicken Website',
+          inquiry_id: '102',
+          title: 'Industrial Parts Catalog & E-Commerce',
           stage: 'ui_ux',
           milestones: [
             { id: 1, title: 'Discovery Meeting Completed', is_completed: true },
@@ -790,6 +792,14 @@ PROCEED WITH SPRINT INITIATION: INITIALIZE CODEBASE STACK NOW.
             </label>
           `).join('');
 
+          const associatedInquiry = mockInquiries.find(i => i.id === proj.inquiry_id);
+          const associationHTML = associatedInquiry ? `
+            <div style="margin-top: 8px; margin-bottom: 12px; font-size: 0.78rem; color: var(--text-dim); display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.02); padding: 6px 10px; border-radius: 4px; border: 1px solid var(--border-dash);">
+              <i data-lucide="link" style="width: 12px; height: 12px; opacity: 0.7;"></i>
+              <span>Linked Inquiry: <strong style="color: #fff;">#${associatedInquiry.id}</strong> - ${associatedInquiry.name} (${associatedInquiry.domain})</span>
+            </div>
+          ` : '';
+
           card.innerHTML = `
             <div class="project-header-row">
               <h4>${proj.title} <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">[${proj.project_code}]</span></h4>
@@ -802,12 +812,14 @@ PROCEED WITH SPRINT INITIATION: INITIALIZE CODEBASE STACK NOW.
                 <option value="deployed" ${proj.stage === 'deployed' ? 'selected' : ''}>Deployed</option>
               </select>
             </div>
+            ${associationHTML}
             <div class="project-milestones-checklist">
               ${milestonesHTML}
             </div>
           `;
           projContainer.appendChild(card);
         });
+        if (window.lucide) window.lucide.createIcons();
       };
       
       renderProjects();
